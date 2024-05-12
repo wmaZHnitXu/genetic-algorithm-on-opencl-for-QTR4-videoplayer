@@ -3,7 +3,7 @@
 
 // OpenCL includes
 #include <CL/cl.h>
-#include <ImagePresentation.h>
+#include <image_presentation.h>
 
 
 int main()

@@ -1,2 +1,3 @@
-D:\OpenclGenetic\ImagePresentation.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\ImagePresentation.obj
-D:\OpenclGenetic\Main.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\Main.obj
+D:\OpenclGenetic\src\image_presentation.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\image_presentation.obj
+D:\OpenclGenetic\src\main.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\main.obj
+D:\OpenclGenetic\src\dmatrix.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\dmatrix.obj

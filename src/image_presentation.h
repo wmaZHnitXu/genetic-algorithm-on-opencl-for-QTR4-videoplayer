@@ -5,4 +5,4 @@
 
 SDL_Surface *createSurfaceFromTexture(SDL_Renderer *renderer, SDL_Texture *texture, int width, int height);
 
-int displayImage(const char* imagePath);
+void displayImage(const char* imagePath);

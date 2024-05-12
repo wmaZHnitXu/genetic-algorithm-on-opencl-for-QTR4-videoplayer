@@ -8,13 +8,14 @@ find_package(SDL2_image REQUIRED)
 find_package(PNG REQUIRED)
 
 add_executable(${PROJECT_NAME}
-    ImagePresentation.c
-    Main.c
+    src/image_presentation.c
+    src/main.c
+    src/dmatrix.c
 )
 
 include_directories(include)
 include_directories(${SDL2_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

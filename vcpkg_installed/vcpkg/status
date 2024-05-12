@@ -51,3 +51,13 @@ Abi: a38572a0e48b0ed736d5c68691065c9df345bf2818b5ad46cb4696b5bc660e0f
 Description: libpng is a library implementing an interface for reading and writing PNG (Portable Network Graphics) format files
 Status: install ok installed
 
+Package: sdl2-image
+Version: 2.8.2
+Port-Version: 2
+Depends: libpng, sdl2, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 86dc04bbcebde8e374b531e29c03725a3f22d20f6e901d59efeb48dd304f66b0
+Description: SDL_image is an image file loading library. It loads images as SDL surfaces and textures, and supports the following formats: BMP, GIF, JPEG, LBM, PCX, PNG, PNM, TGA, TIFF, WEBP, XCF, XPM, XV
+Status: install ok installed
+

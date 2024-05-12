@@ -5,6 +5,8 @@
         "sdl_image.h": "c",
         "presentation.h": "c",
         "chrono": "c",
-        "functional": "c"
+        "functional": "c",
+        "imagepresentation.h": "c",
+        "math.h": "c"
     }
 }
