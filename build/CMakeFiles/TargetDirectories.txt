@@ -1,3 +1,3 @@
-D:/OpenclGenetic/build/CMakeFiles/HelloOpenCL.dir
+D:/OpenclGenetic/build/CMakeFiles/QTR4_gpu_videoconverter.dir
 D:/OpenclGenetic/build/CMakeFiles/ALL_BUILD.dir
 D:/OpenclGenetic/build/CMakeFiles/ZERO_CHECK.dir

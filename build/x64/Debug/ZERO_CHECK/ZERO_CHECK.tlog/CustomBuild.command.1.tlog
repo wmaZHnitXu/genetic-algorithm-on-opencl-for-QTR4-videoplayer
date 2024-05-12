@@ -1,6 +1,6 @@
 ^D:\OPENCLGENETIC\BUILD\CMAKEFILES\46C025CF724D4BC4E796473C275A533B\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/OpenclGenetic -BD:/OpenclGenetic/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/OpenclGenetic/build/HelloOpenCL.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/OpenclGenetic -BD:/OpenclGenetic/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/OpenclGenetic/build/QTR4_gpu_videoconverter.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

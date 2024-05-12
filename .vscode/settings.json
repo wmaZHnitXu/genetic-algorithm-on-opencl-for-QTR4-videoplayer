@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "cl.h": "c"
+        "cl.h": "c",
+        "stdio.h": "c",
+        "sdl_image.h": "c",
+        "presentation.h": "c",
+        "chrono": "c",
+        "functional": "c"
     }
 }

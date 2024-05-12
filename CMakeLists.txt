@@ -1,15 +1,20 @@
 cmake_minimum_required(VERSION 3.1) # 3.1 << C_STANDARD 11
 
-project(HelloOpenCL LANGUAGES C)
+project(QTR4_gpu_videoconverter LANGUAGES C)
 
 find_package(OpenCL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(PNG REQUIRED)
 
-add_executable(${PROJECT_NAME} Main.c)
+add_executable(${PROJECT_NAME}
+    ImagePresentation.c
+    Main.c
+)
 
+include_directories(include)
 include_directories(${SDL2_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
