@@ -1,0 +1,63 @@
+Package: vcpkg-cmake-config
+Version: 2022-02-06
+Port-Version: 1
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 9ff960d0265259e0a5b8570929340ecc6778317c9726763f0ea882ddcb5bca8e
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-18
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 3647c646a2e15abf11cd53ef9bbe939aa96c1ef4a88a142957fad90a5abb4c4e
+Status: install ok installed
+
+Package: opencl
+Version: v2023.02.06
+Port-Version: 2
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 90ee4045a3eeec05b44c29e1efe7e931882566d3731a4539ebbfd3b4c83406af
+Description: C/C++ headers and ICD loader (Installable Client Driver) for OpenCL
+Status: install ok installed
+
+Package: sdl2
+Version: 2.30.1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 58acdd518226df5b38d900c26456fe017883ab435701c6b2c8a4e7e88060b1e3
+Description: Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+Status: install ok installed
+
+Package: zlib
+Version: 1.3.1
+Depends: vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 43955d35023b566e4253f5b28c9eb093ca5d6bb411e763c1f76dbb08af1bd1ca
+Description: A compression library
+Status: install ok installed
+
+Package: libpng
+Version: 1.6.43
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config, zlib
+Architecture: x64-windows
+Multi-Arch: same
+Abi: a38572a0e48b0ed736d5c68691065c9df345bf2818b5ad46cb4696b5bc660e0f
+Description: libpng is a library implementing an interface for reading and writing PNG (Portable Network Graphics) format files
+Status: install ok installed
+
+Package: sdl2-image
+Version: 2.8.2
+Port-Version: 2
+Depends: libpng, sdl2, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 86dc04bbcebde8e374b531e29c03725a3f22d20f6e901d59efeb48dd304f66b0
+Description: SDL_image is an image file loading library. It loads images as SDL surfaces and textures, and supports the following formats: BMP, GIF, JPEG, LBM, PCX, PNG, PNM, TGA, TIFF, WEBP, XCF, XPM, XV
+Status: install ok installed
+

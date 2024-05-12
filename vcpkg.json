@@ -1,0 +1,8 @@
+{
+  "dependencies": [
+    "libpng",
+    "opencl",
+    "sdl2",
+    "sdl2-image"
+  ]
+}
