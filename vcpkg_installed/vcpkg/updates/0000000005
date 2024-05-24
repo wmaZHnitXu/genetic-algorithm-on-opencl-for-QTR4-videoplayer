@@ -1,0 +1,7 @@
+Package: gdk-pixbuf
+Feature: tiff
+Depends: tiff
+Architecture: x64-windows
+Multi-Arch: same
+Description: Enable TIFF loader (requires libtiff)
+Status: purge ok half-installed

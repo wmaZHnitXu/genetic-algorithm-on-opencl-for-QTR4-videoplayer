@@ -1,0 +1,110 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/libepoxy-x64-windows-1.5.10#2-b6e35c06-9d59-4695-b42b-67226619f06c",
+  "name": "libepoxy:x64-windows@1.5.10#2 81848b98b84774733b8850e5fc2c94d265f683dac5eb0f70a26ee798206983e1",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-d6945642ee5c3076addd1a42c331bbf4cfc97457"
+    ],
+    "created": "2024-05-12T23:59:37Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "libepoxy",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "1.5.10#2",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@df7389605ff392a312b77b633ca658167c14221a",
+      "homepage": "https://github.com/anholt/libepoxy",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Epoxy is a library for handling OpenGL function pointer management for you",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "libepoxy:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "81848b98b84774733b8850e5fc2c94d265f683dac5eb0f70a26ee798206983e1",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "anholt/libepoxy",
+      "downloadLocation": "git+https://github.com/anholt/libepoxy@1.5.10",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "6786f31c6e2865e68a90eb912900a86bf56fd3df4d78a477356886ac3b6ef52ac887b9c7a77aa027525f868ae9e88b12e5927ba56069c2e115acd631fca3abee"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/df7389605ff392a312b77b633ca658167c14221a/portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3937e8020db50affc92e82bcf4eaa0b572fa4c02f10004ae3e32531bf777b976"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/df7389605ff392a312b77b633ca658167c14221a/vcpkg.json",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a071af9759f08d93f7e9bd357d7188df79ebe27ecfede45e626ee420d136acb9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

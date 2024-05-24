@@ -1,0 +1,15 @@
+x64-windows/
+x64-windows/share/
+x64-windows/share/sassc/
+x64-windows/share/sassc/copyright
+x64-windows/share/sassc/vcpkg.spdx.json
+x64-windows/share/sassc/vcpkg_abi_info.txt
+x64-windows/tools/
+x64-windows/tools/sassc/
+x64-windows/tools/sassc/bin/
+x64-windows/tools/sassc/bin/getopt.dll
+x64-windows/tools/sassc/bin/sass-1.dll
+x64-windows/tools/sassc/bin/sassc.exe
+x64-windows/tools/sassc/debug/
+x64-windows/tools/sassc/debug/bin/
+x64-windows/tools/sassc/debug/bin/sassc.exe

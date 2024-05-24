@@ -1,0 +1,176 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/harfbuzz-x64-windows-8.4.0#1-67c93248-c32a-4c60-8b5b-187e58d30c6b",
+  "name": "harfbuzz:x64-windows@8.4.0#1 d290cc1668b4dae054fbf8136fc8875f4cb09ee4bbd565cf2450778dd957751e",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-d6945642ee5c3076addd1a42c331bbf4cfc97457"
+    ],
+    "created": "2024-05-12T23:54:02Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-3"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-4"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-3",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-4",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "harfbuzz",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "8.4.0#1",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@cf348ecae022fb9ccfd58be64fcd90008e1fb74d",
+      "homepage": "https://github.com/harfbuzz/harfbuzz",
+      "licenseConcluded": "MIT-Modern-Variant",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "HarfBuzz OpenType text shaping engine",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "harfbuzz:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "d290cc1668b4dae054fbf8136fc8875f4cb09ee4bbd565cf2450778dd957751e",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "MIT-Modern-Variant",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "harfbuzz/harfbuzz",
+      "downloadLocation": "git+https://github.com/harfbuzz/harfbuzz@8.4.0",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "c90fc8f67ed6d75536a6a0d83434c51756863e51631f00fa390d124d721b003cba4739777b51ac2e9f107914eb5e2ab3daa00dab257435800bb60ff6d5dd45f6"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/cf348ecae022fb9ccfd58be64fcd90008e1fb74d/fix-win32-build.patch",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "04983e271a7f8899fc6d6e6d713ab84a535b6efc525d7506e788b08d541cff41"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/cf348ecae022fb9ccfd58be64fcd90008e1fb74d/harfbuzzConfig.cmake.in",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2d316d965af13db5455dacdbc2cce641ef9bcf0fc1c9c0c2ed107890558af188"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/cf348ecae022fb9ccfd58be64fcd90008e1fb74d/portfile.cmake",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1955a7fc03a92cdd0c1089ee1c34a685d1dc3207051989446ddc317097c0d462"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/cf348ecae022fb9ccfd58be64fcd90008e1fb74d/usage",
+      "SPDXID": "SPDXRef-file-3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "515dd04580f98fcd28bcccc2f80825332a014e6ef967119c2f32f43ee2808358"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/cf348ecae022fb9ccfd58be64fcd90008e1fb74d/vcpkg.json",
+      "SPDXID": "SPDXRef-file-4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "29cb4c14e79fc2552a509c3b80de91b45ba43d268bc4b3895ab8bf1dc7feda4e"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+Package: atk
+Version: 2.38.0
+Port-Version: 8
+Depends: gettext, glib, vcpkg-tool-meson
+Architecture: x64-windows
+Multi-Arch: same
+Abi: dccc25d14ad689dd8d6320e61ac2466ac44784fa35af7c9b4cdcfb3992030ea1
+Description: GNOME Accessibility Toolkit
+Status: purge ok half-installed

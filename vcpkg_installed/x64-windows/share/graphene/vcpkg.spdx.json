@@ -1,0 +1,133 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/graphene-x64-windows-1.10.8#2-f2a1f994-4d28-4953-8c57-3a342d3c22cc",
+  "name": "graphene:x64-windows@1.10.8#2 25c335aa8a1e483c0f43c4524d03ee6dab14cc98dc8edc4d51a7acb2dbb98ac9",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-d6945642ee5c3076addd1a42c331bbf4cfc97457"
+    ],
+    "created": "2024-05-13T00:00:06Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "graphene",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "1.10.8#2",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@abffc31a5c8762671618bdca4bbcd620e171f6d1",
+      "homepage": "https://www.gtk.org/",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "A thin layer of types for graphic libraries.",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "graphene:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "25c335aa8a1e483c0f43c4524d03ee6dab14cc98dc8edc4d51a7acb2dbb98ac9",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "graphene-${VERSION}.tar.xz",
+      "packageFileName": "graphene-${VERSION}.tar.xz",
+      "downloadLocation": "https://download.gnome.org/sources/graphene/1.10/graphene-${VERSION}.tar.xz",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "c56dab6712cf58387d0512a213cd0cd456679e46a495ee5cfd9bc25440cda2d72d56974af4e462f3c863869a1e2e506b702f468933045609d35fdf006212c67d"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/abffc31a5c8762671618bdca4bbcd620e171f6d1/fix_clang-cl.patch",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0399eee228995690514af94548b8e0db11a55889741835e81944101e2bed2d8c"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/abffc31a5c8762671618bdca4bbcd620e171f6d1/portfile.cmake",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "922cbe65dfceefe637d677099ed2ba5b222aab727e583188d27cbeb21eff2917"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/abffc31a5c8762671618bdca4bbcd620e171f6d1/vcpkg.json",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5b8a68f3f733b9f698d312e661b9c18c55614384fac32220f815652dfb020613"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/libsass-x64-windows-3.6.6-23920776-51e6-4c5a-a592-93bb7c888a08",
+  "name": "libsass:x64-windows@3.6.6 faa3b0071d724dbdafb1c504b6dcb5ec24e24d00e9f495ca7d35de2c6f11cc70",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-d6945642ee5c3076addd1a42c331bbf4cfc97457"
+    ],
+    "created": "2024-05-12T23:17:57Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "libsass",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "3.6.6",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@2bf8ed94dbbf360cd9cab9814995b73fa2f554ad",
+      "homepage": "https://github.com/sass/libsass",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "LibSass - Sass compiler written in C++",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "libsass:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "faa3b0071d724dbdafb1c504b6dcb5ec24e24d00e9f495ca7d35de2c6f11cc70",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "sass/libsass",
+      "downloadLocation": "git+https://github.com/sass/libsass@3.6.6",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "659828c854af391c10a16954425fbeeb5fa036189dea45555cd8046338f7469eb7f8d84134030ce644921514b8f397ef6070b56dfb116ea7ce94328d64576518"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/2bf8ed94dbbf360cd9cab9814995b73fa2f554ad/portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1e2f3ab4f7d76c4e555fb2d1c7d011513b3ce139d4686bf98b2560b6835dfac9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/2bf8ed94dbbf360cd9cab9814995b73fa2f554ad/remove_compiler_flags.patch",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "beb7702d8d6735869940c92932d1ca89c7dbd7d01406e4b2575de7293ec9b4b9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/ProGamer/AppData/Local/vcpkg/registries/git-trees/2bf8ed94dbbf360cd9cab9814995b73fa2f554ad/vcpkg.json",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "510e41db1521ebb7985a5c6877fb901dbf2b114b241285989e42288c6b8dd62b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

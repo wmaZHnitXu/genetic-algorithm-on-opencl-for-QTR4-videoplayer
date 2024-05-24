@@ -1,13 +1,16 @@
 #include <dmatrix.h>
 #include <stdio.h>
 
-DMatrix* allocDMatrix(int rows, int cols) {
+DMatrix* allocDMatrix(int cols, int rows) {
     DMatrix* m = (DMatrix*)malloc(sizeof(DMatrix));
     m->rows = rows;
     m->cols = cols;
     m->data = (int**)malloc(rows * sizeof(int*));
     for (int i = 0; i < rows; i++) {
         m->data[i] = (int*)malloc(cols * sizeof(int));
+        for (int j = 0; j < cols; j++) {
+            m->data[i][j] = 0x00000000;
+        }
     }
     return m;
 }

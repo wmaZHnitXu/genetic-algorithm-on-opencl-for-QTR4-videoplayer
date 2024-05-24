@@ -1,5 +1,71 @@
-error: in triplet x64-windows: Unable to find a valid Visual Studio instance
-Could not locate a complete Visual Studio instance
-The following paths were examined for Visual Studio instances:
-  C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary/Build\vcvarsall.bat
+Fetching registry information from https://github.com/microsoft/vcpkg (HEAD)...
+Detecting compiler hash for triplet x64-windows...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/bin/Hostx64/x64/cl.exe
+The following packages will be built and installed:
+    libpng:x64-windows@1.6.43#1 -- C:\Users\ProGamer\AppData\Local\vcpkg\registries\git-trees\1b0781214ef5a3497d0e7db2c0ed7f7fae74248b
+    opencl:x64-windows@v2023.02.06#2 -- C:\Users\ProGamer\AppData\Local\vcpkg\registries\git-trees\c55e82e4ec70906ec28b692d2625584025de4725
+    sdl2:x64-windows@2.30.1 -- C:\Users\ProGamer\AppData\Local\vcpkg\registries\git-trees\71b609d356d21c9479ddeb27f4737ab70982f4a5
+    sdl2-image:x64-windows@2.8.2#2 -- C:\Users\ProGamer\AppData\Local\vcpkg\registries\git-trees\61b91c7aa89e01e237616121222f98e505a6d44b
+  * vcpkg-cmake:x64-windows@2024-04-18 -- C:\Users\ProGamer\AppData\Local\vcpkg\registries\git-trees\a10a94e8d0071ed4804d40d0f0f0c5e4e7180afd
+  * vcpkg-cmake-config:x64-windows@2022-02-06#1 -- C:\Users\ProGamer\AppData\Local\vcpkg\registries\git-trees\8d54cc4f487d51b655abec5f9c9c3f86ca83311f
+  * zlib:x64-windows@1.3.1 -- C:\Users\ProGamer\AppData\Local\vcpkg\registries\git-trees\3f05e04b9aededb96786a911a16193cdb711f0c9
+Additional packages (*) will be modified to complete this operation.
+Restored 7 package(s) from C:\Users\ProGamer\AppData\Local\vcpkg\archives in 257 ms. Use --debug to see more details.
+Installing 1/7 vcpkg-cmake:x64-windows@2024-04-18...
+Elapsed time to handle vcpkg-cmake:x64-windows: 4.19 ms
+vcpkg-cmake:x64-windows package ABI: 2b198f90c414188f4b44ad851912d6bfbfb9c71afbabf5ef849027573f29152d
+Installing 2/7 zlib:x64-windows@1.3.1...
+Elapsed time to handle zlib:x64-windows: 6.22 ms
+zlib:x64-windows package ABI: 477bc46bfaa9293967d937e7dc5c5b82ceb881f0351593efa3b7d10b6fb9ae9a
+Installing 3/7 vcpkg-cmake-config:x64-windows@2022-02-06#1...
+Elapsed time to handle vcpkg-cmake-config:x64-windows: 2.72 ms
+vcpkg-cmake-config:x64-windows package ABI: c0c0d952981faf958ceacba505f37a2c847ca75a7dfd53b417beda2384e753b8
+Installing 4/7 libpng:x64-windows@1.6.43#1...
+Elapsed time to handle libpng:x64-windows: 9.72 ms
+libpng:x64-windows package ABI: df59f20f4ae279d8d068f57c1de30076b040216c9d4a35cec9b7cf2922da83cd
+Installing 5/7 opencl:x64-windows@v2023.02.06#2...
+Elapsed time to handle opencl:x64-windows: 7.79 ms
+opencl:x64-windows package ABI: ac5a52a45706697b66d7b3efa75f5df9399b727d572d0dc8516ec459117a6699
+Installing 6/7 sdl2:x64-windows@2.30.1...
+Elapsed time to handle sdl2:x64-windows: 22.4 ms
+sdl2:x64-windows package ABI: ba2efa5b08c1cdfbfff297989655721604c3227b801bdd7d9c44e93fd74c2634
+Installing 7/7 sdl2-image:x64-windows@2.8.2#2...
+Elapsed time to handle sdl2-image:x64-windows: 8.88 ms
+sdl2-image:x64-windows package ABI: 4e341dff5f16863e3f17a95cbdfb57a1c2d48384c3f087cc1c2903a5a97e67cc
+Total install time: 62.2 ms
+The package libpng is compatible with built-in CMake targets:
+
+    find_package(PNG REQUIRED)
+    target_link_libraries(main PRIVATE PNG::PNG)
+
+The package opencl is compatible with built-in CMake targets via CMake v3.6 and prior syntax
+
+    find_package(OpenCL REQUIRED)
+    target_link_libraries(main PRIVATE ${OpenCL_LIBRARIES})
+    target_include_directories(main PRIVATE ${OpenCL_INCLUDE_DIRS})
+
+and the CMake v3.7 and beyond imported target syntax
+
+    find_package(OpenCL REQUIRED)
+    target_link_libraries(main PRIVATE OpenCL::OpenCL)
+
+This package is only an OpenCL SDK. To actually run OpenCL code you also need to install an implementation.
+
+    WINDOWS: implementations typically ship with the drivers of you CPU/GPU vendors.
+    LINUX: implementations may be installed from your distro's repo or manually. There are too many to count.
+    APPLE: consult your distribution vendor on the state of OpenCL support: https://support.apple.com/en-us/HT202823
+
+sdl2 provides CMake targets:
+
+    find_package(SDL2 CONFIG REQUIRED)
+    target_link_libraries(main
+        PRIVATE
+        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    )
+
+sdl2-image provides CMake targets:
+
+    find_package(SDL2_image CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
 

@@ -4,6 +4,7 @@
 // OpenCL includes
 #include <CL/cl.h>
 #include <image_presentation.h>
+#include <dmatrix.h>
 
 
 int main()
@@ -17,7 +18,9 @@ int main()
         printf_s("%u platform(s) found\n", numPlatforms);
     else
         printf_s("clGetPlatformIDs(%i)\n", CL_err);
-
-    displayImage("test.png");
+    
+    printf_s("sex???");
+    DMatrix *m = createMatrixFromPng("test.png");
+    displayMatrix(m);
     return 0;
 }

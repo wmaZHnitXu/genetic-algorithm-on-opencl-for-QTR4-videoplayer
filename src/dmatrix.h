@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,3 +11,5 @@ typedef struct {
 DMatrix* allocDMatrix(int rows, int cols);
 
 void freeDMatrix(DMatrix* m);
+
+void setDMatrixElem(DMatrix* m, int row, int col, int value);
