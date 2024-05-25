@@ -2,32 +2,32 @@
 #include <math.h>
 
 // Function to create a new node
-struct Node* create_node(int data) {
-    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+Node* createNode(int data) {
+    Node* new_node = (struct Node*)malloc(sizeof(Node));
     if (!new_node) {
         fprintf(stderr, "Memory allocation error\n");
         exit(EXIT_FAILURE);
     }
-    new_node->data = data;
+    new_node->rect = data;
     new_node->next = NULL;
     return new_node;
 }
 
 // Function to insert a node at the beginning of the list
-void insert_at_beginning(struct Node** head_ref, int new_data) {
-    struct Node* new_node = create_node(new_data);
+void insertAtBeginning(Node** head_ref, int new_data) {
+    Node* new_node = create_node(new_data);
     new_node->next = *head_ref;
     *head_ref = new_node;
 }
 
 // Function to insert a node at the end of the list
-void insert_at_end(struct Node** head_ref, int new_data) {
-    struct Node* new_node = create_node(new_data);
+void insertAtEnd(Node** head_ref, int new_data) {
+    Node* new_node = create_node(new_data);
     if (*head_ref == NULL) {
         *head_ref = new_node;
         return;
     }
-    struct Node* temp = *head_ref;
+    Node* temp = *head_ref;
     while (temp->next != NULL) {
         temp = temp->next;
     }
@@ -35,19 +35,20 @@ void insert_at_end(struct Node** head_ref, int new_data) {
 }
 
 // Function to delete a node with a specific key
-void delete_node(struct Node** head_ref, int key) {
-    struct Node* temp = *head_ref;
-    struct Node* prev = NULL;
+void deleteNode(Node** head_ref, int key) {
+    Node* temp = *head_ref;
+    Node* prev = NULL;
 
     // If head node itself holds the key to be deleted
-    if (temp != NULL && temp->data == key) {
+    if (temp != NULL && temp->rect == key) {
         *head_ref = temp->next;
+        free(temp->rect);
         free(temp);
         return;
     }
 
     // Search for the key to be deleted, keep track of the previous node
-    while (temp != NULL && temp->data != key) {
+    while (temp != NULL && temp->rect != key) {
         prev = temp;
         temp = temp->next;
     }
@@ -57,25 +58,27 @@ void delete_node(struct Node** head_ref, int key) {
 
     // Unlink the node from the linked list
     prev->next = temp->next;
+    free(temp->rect);
     free(temp);
 }
 
 // Function to print the linked list
-void print_list(struct Node* node) {
+void printList(Node* node) {
     while (node != NULL) {
-        printf("%d -> ", node->data);
+        printf("rect print not implemented");
         node = node->next;
     }
     printf("NULL\n");
 }
 
 // Function to free the entire linked list
-void free_list(struct Node* head) {
-    struct Node* current = head;
-    struct Node* next;
+void freeList(struct Node* head) {
+    Node* current = head;
+    Node* next;
 
     while (current != NULL) {
         next = current->next; // Save the next node
+        free(current->rect);
         free(current);        // Free the current node
         current = next;       // Move to the next node
     }
@@ -88,6 +91,16 @@ Rect* allocRect(int x, int y, int width, int height, int color) {
     rect->width = width;
     rect->height = height;
     rect->color = color;
+    return rect;
+}
+
+Rect *allocCopyOfRect(Rect *original) {
+    Rect* rect = (Rect*)malloc(sizeof(Rect));
+    rect->x = original->x;
+    rect->y = original->y;
+    rect->width = original->width;
+    rect->height = original->height;
+    rect->color = original->color;
     return rect;
 }
 

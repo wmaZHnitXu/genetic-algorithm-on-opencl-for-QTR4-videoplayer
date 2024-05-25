@@ -19,17 +19,11 @@ int main()
     printf_s("sex???");
     DMatrix* m = allocDMatrix(256, 256);
     Rect* rect = allocRect(16, 16, 64, 64, 0xFF00FFFF);
-    DMatrix* m2 = allocDMatrix(256, 256);
-    Rect* rect2 = allocRect(16, 16, 64, 64, 0xFF00FF00);
-    drawRectOnDMatrix(rect, m);
-    drawRectOnDMatrix(rect2, m2);
 
-    printf_s("mse: %f\n", mseBetweenDMatrixes(m, m2));
+    displayMatrix(m);
     displayMatrix(m);
     
-    freeDMatrix(m);
-    freeDMatrix(m2);
+    freeDMatrix(m);    
     free(rect);
-    free(rect2);
     return 0;
 }
