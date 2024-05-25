@@ -21,18 +21,17 @@ int main()
     DMatrix* currentMatrix = allocDMatrix(256, 256);
     DMatrix* targetMatrix = createMatrixFromPng("test.png");
     
-    int rectcount = 128;
+    int rectcount = 1024;
     int mutationsteps = 7;
     int childrencount = 100;
 
-    
     for (int i = 0; i < rectcount; i++) {
-        Node* population = getPopulation(currentMatrix, targetMatrix, 1000);
-        for (int j = 0; j < 3; j++) {
+        Node* population = getPopulation(currentMatrix, targetMatrix, 1000, 10);
+        for (int j = 0; j < mutationsteps; j++) {
             Node* madeittosex = createSublist(population, 10);
             freeList(population);
 
-            population = getMutation(madeittosex, currentMatrix, targetMatrix, childrencount);
+            population = getMutation(madeittosex, currentMatrix, targetMatrix, childrencount, 10);
             freeList(madeittosex);
         }
 
@@ -40,12 +39,17 @@ int main()
         freeList(population);
 
         drawRectOnDMatrix(rectToApply, currentMatrix);
+        printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, mseBetweenDMatrixes(currentMatrix, targetMatrix), rectToApply->color);
         free(rectToApply);
-        printf_s("Rect#%i  MSE:%f\n", i+1, mseBetweenDMatrixes(currentMatrix, targetMatrix));
     }
     
     
-    displayMatrix(targetMatrix);
+    Rect* whole = allocRect(0, 0, 256, 256, 0x00000000);
+    int color = getAvgColor(whole, targetMatrix);
+    printf_s("color:0x%08x\n", color);
+    //drawRectOnDMatrix(allocRect(128, 128, 128, 128, 0xFFFF00FF), currentMatrix);
+    
+    displayMatrix(currentMatrix);
 
     freeDMatrix(currentMatrix);    
     return 0;

@@ -39,8 +39,8 @@ void printList(Node* node);
 void freeList(Node* head);
 int countList(Node* head);
 Node* createSublist(Node* original, int count);
+void deleteLastNode(Node** head_ref);
 
-double mseBetweenDMatrixes(DMatrix* a, DMatrix* b);
 void drawRectOnDMatrix(Rect* rect, DMatrix* matrix);
 Rect* allocRect(int x, int y, int width, int height, int color);
 Rect* allocCopyOfRect(Rect* original);

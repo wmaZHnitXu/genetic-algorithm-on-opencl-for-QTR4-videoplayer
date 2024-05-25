@@ -129,7 +129,7 @@ void displayImage(const char* imagePath) {
     SDL_RenderCopy(renderer , texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(5000); //Wait before closing
+    SDL_Delay(15000); //Wait before closing
 
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
@@ -197,7 +197,7 @@ void displayMatrix(DMatrix* matrix) {
     SDL_RenderCopy(renderer , texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(5000); //Wait before closing
+    SDL_Delay(15000); //Wait before closing
 
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
@@ -305,7 +305,7 @@ DMatrix* createMatrixFromPng(char* path) {
             c++;            
         }
     }
-    printf("Avg color: RGBA(%f, %f, %f)\n", r / c, g / c, b / c);
+    printf("Avg color: RGBA(%f, %f, %f)\n", r, g, b);
 
     // Cleanup
     for (int y = 0; y < height; y++) {

@@ -1,6 +1,8 @@
 #include <sequential_convert.h>
 #include <stdlib.h>
 
+double mseMemMatrix[1024][1024];
+
 double evalRectOnDMatrix(Rect *rect, DMatrix *current, DMatrix *target, double prevMse) {
     DMatrix *copyOfCurrent = allocDMatrix(current->rows, current->cols);
 
@@ -17,38 +19,55 @@ double evalRectOnDMatrix(Rect *rect, DMatrix *current, DMatrix *target, double p
     return prevMse - nextMse;
 }
 
-Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount) {
+Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount, int finalRectCount) {
     double mse = mseBetweenDMatrixes(current, target);
+
+
     struct Node* head = NULL;
+    Rect *rect = NULL;
 
     for (int i = 0; i < rectCount; i++) {
-        Rect *rect = createRandomRect();
+        if (rect == NULL) rect = createRandomRect();
+        else {
+            rect->width = rand255();
+            rect->height = rand255();
+            rect->x = rand255();
+            rect->y = rand255();
+        }
         if (rect->x + rect->width > 256) rect->width = 256 - rect->x;
         if (rect->y + rect->height > 256) rect->height = 256 - rect->y;
 
         rect->color = getAvgColor(rect, target);
-        rect->score = evalRectOnDMatrix(rect, current, target, mse);
+        rect->score = optimisedEvalRectOnMatrix(rect, current, target, mse);
         
         if (head == NULL) {
-            insertAtBeginning(&head, rect);
+            insertAtBeginning(&head, allocCopyOfRect(rect));
         }
         else {
+            int count = 1;
             Node *prev = NULL;
             Node *cur = head;
             while (cur->rect->score > rect->score) {
                 prev = cur;
                 cur = cur->next;
-                if (cur == NULL) {
+                count++;
+                if (cur == NULL || count >= finalRectCount) {
                     break;
                 }
             }
             if (prev == NULL) {
-                insertAtBeginning(&head, rect);
+                insertAtBeginning(&head, allocCopyOfRect(rect));
             }
             else {
-                prev->next = createNode(rect);
-                if (cur != NULL && cur != head) {
-                    prev->next->next = cur;
+                if (count < finalRectCount) {
+                    prev->next = createNode(allocCopyOfRect(rect));
+                    if (cur != NULL && cur != head) {
+                        prev->next->next = cur;
+                    }
+
+                    while (countList(head) > finalRectCount) {
+                        deleteLastNode(&head);
+                    }
                 }
             }
         }
@@ -57,53 +76,62 @@ Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount) {
     return head;
 }
 
-Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int childrenCount) {
+Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int childrenCount, int finalRectCount) {
     double mse = mseBetweenDMatrixes(current, target);
     struct Node *head = NULL;
     Node *currentParentNode = prevGen;
 
-    while (currentParentNode != NULL) {
-        for (int j = 0; j < childrenCount; j++) {
-            Rect *rect = allocCopyOfRect(currentParentNode->rect);
+    Rect *rect = allocRect(0, 0, 0, 0, 0);
 
+    while (currentParentNode != NULL) {
+        Rect* prevRect = currentParentNode->rect;
+        for (int j = 0; j < childrenCount; j++) {
             //MUTATION
-            rect->x += rand31() - 16;
-            rect->y += rand31() - 16;
+            rect->x = prevRect->x + rand8() - 4;
+            rect->y = prevRect->y + rand8() - 4;
             if (rect->x > 255) rect->x = 255;
             if (rect->y > 255) rect->y = 255;
             if (rect->x < 0) rect->x = 0;
             if (rect->y < 0) rect->y = 0;
 
-            rect->width += rand31() - 16;
-            rect->height += rand31() - 16;
+            rect->width = prevRect->width + rand8() - 4;
+            rect->height = prevRect->height + rand8() - 4;
             if (rect->x + rect->width > 256) rect->width = 256 - rect->x;
             if (rect->y + rect->height > 256) rect->height = 256 - rect->y;
             if (rect->width < 1) rect->width = 1;
             if (rect->height < 1) rect->height = 1;
 
             rect->color = getAvgColor(rect, target);
-            rect->score = evalRectOnDMatrix(rect, current, target, mse);
+            rect->score = optimisedEvalRectOnMatrix(rect, current, target, mse);
             
             if (head == NULL) {
-                insertAtBeginning(&head, rect);
+                insertAtBeginning(&head, allocCopyOfRect(rect));
             }
             else {
                 Node *prev = NULL;
                 Node *cur = head;
+                int count = 1;
                 while (cur->rect->score > rect->score) {
                     prev = cur;
                     cur = cur->next;
-                    if (cur == NULL) {
+                    count++;
+                    if (cur == NULL || count >= finalRectCount) {
                         break;
                     }
                 }
                 if (prev == NULL) {
-                    insertAtBeginning(&head, rect);
+                    insertAtBeginning(&head, allocCopyOfRect(rect));
                 }
                 else {
-                    prev->next = createNode(rect);
-                    if (cur != NULL && cur != head) {
-                        prev->next->next = cur;
+                    if (count < finalRectCount) {
+                        prev->next = createNode(allocCopyOfRect(rect));
+                        if (cur != NULL && cur != head) {
+                            prev->next->next = cur;
+                        }
+
+                        while (countList(head) > finalRectCount) {
+                            deleteLastNode(&head);
+                        }
                     }
                 }
             }
@@ -120,6 +148,70 @@ Rect *createRandomRect() {
     return rect;
 }
 
+double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
+    double sum_sq = 0.0;
+    if (a->cols != b->cols || a->rows != b->rows) {
+        fprintf(stderr, "Dimensions do not match.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int* diff = malloc(sizeof(int) * 4);
+    for (int i = 0; i < a->rows; i++) {
+        for (int j = 0; j < a->cols; j++) {
+            unsigned char* aColors = &(a->data[i][j]);
+            unsigned char* bColors = &(b->data[i][j]);
+            for (int k = 0; k < 4; k++) {
+                diff[k] = aColors[k] - bColors[k];
+                diff[k] = diff[k] * diff[k];
+            }
+            double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
+            mseMemMatrix[i][j] = err * err;
+            sum_sq += err * err;
+        }
+    }
+    free(diff);
+
+    double mse = sum_sq / (double)(a->cols * a->rows);
+    return mse;
+}
+
+double optimisedEvalRectOnMatrix(Rect *rect, DMatrix *current, DMatrix *target, double prevMse) {
+    double oldSum = 0.0;
+    double newSum = 0.0;
+
+    int w = target->cols;
+    int h = target->rows;
+
+    int x_start = rect->x;
+    int x_end = rect->x + rect->width;
+    x_end = x_end < w ? x_end : w;
+
+    int y_start = rect->y;
+    int y_end = rect->y + rect->height;
+    y_end = y_end < h ? y_end : h;
+
+    int* diff = malloc(sizeof(int) * 4);
+    for (int i = y_start; i < y_end; i++) {
+        for (int j = x_start; j < x_end; j++) {
+            unsigned char* targetColor = &(target->data[i][j]);
+            unsigned char* color = &(rect->color);
+            for (int k = 0; k < 4; k++) {
+                diff[k] = color[k] - targetColor[k];
+                diff[k] = diff[k] * diff[k];
+            }
+            double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
+
+            newSum += err * err;
+            oldSum += mseMemMatrix[i][j];
+        }
+    }
+    free(diff);
+
+    double divider = current->cols * current->rows;
+    double mse = oldSum / divider - newSum / divider;
+    return mse;
+}
+
 int getAvgColor(Rect *rect, DMatrix *target) {
     int w = target->cols;
     int h = target->rows;
@@ -132,7 +224,9 @@ int getAvgColor(Rect *rect, DMatrix *target) {
     int y_end = rect->y + rect->height;
     y_end = y_end < h ? y_end : h;
 
-    unsigned char* channelSumms = malloc(sizeof(int));
+    int* channelSumms = malloc(sizeof(int) * 4);
+    for (int k = 0; k < 4; k++) channelSumms[k] = 0;
+    unsigned char* test = NULL;
     int pxCount = 0;
 
     for (int i = y_start; i < y_end; i++) {
@@ -141,21 +235,25 @@ int getAvgColor(Rect *rect, DMatrix *target) {
             for (int k = 0; k < 4; k++) {
                 channelSumms[k] += colors[k];
             }
+            //printf("color:0x%08x\n", target->data[i][j]);
+            test = colors;
             pxCount++;
         }
     }
 
-    double r = (double)channelSumms[1] / pxCount;
-    double g = (double)channelSumms[2] / pxCount;
-    double b = (double)channelSumms[3] / pxCount;
+    //0xFFFFFFFF
+    //   3 2 1 0
 
+    double r = (double)(channelSumms[2]) / (double)pxCount;
+    double g = (double)(channelSumms[1]) / (double)pxCount;
+    double b = (double)(channelSumms[0]) / (double)pxCount;
+    //printf("r%ig%ib%i %f\n", channelSumms[2], channelSumms[1], channelSumms[0], g);
+
+    int result = 0xFF000000;
+    result += (int)r * 0x00010000;
+    result += (int)g * 0x00000100;
+    result += (int)b * 0x00000001;
     free(channelSumms);
-
-    int result =  0xFF000000;
-    result += r * 0x00010000;
-    result += g * 0x00000100;
-    result += b * 0x00000001;
-
     return result;
 }
 
@@ -163,7 +261,7 @@ int rand255() {
     return rand() % 256;
 }
 
-int rand31() {
-    return rand() % 32;
+int rand8() {
+    return rand() % 9;
 }
 

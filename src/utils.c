@@ -60,6 +60,32 @@ void deleteNode(Node** head_ref, Rect* key) {
     free(temp);
 }
 
+void deleteLastNode(Node** head_ref) {
+    if (*head_ref == NULL) {
+        return;
+    }
+
+    Node* temp = *head_ref;
+
+    if (temp->next == NULL) {
+        free(temp->rect);
+        free(temp);
+        *head_ref = NULL;
+        return;
+    }
+
+    Node* prev = NULL;
+    while (temp->next != NULL) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    prev->next = NULL;
+
+    free(temp->rect);
+    free(temp);
+}
+
 // Function to print the linked list
 void printList(Node* node) {
     int elem = 0;
@@ -89,6 +115,7 @@ int countList(Node* head) {
 
     while (current != NULL) {
         count++;
+        current = current->next;
     }
     return count;
 }
@@ -128,32 +155,6 @@ Rect* allocCopyOfRect(Rect* original) {
     rect->color = original->color;
     rect->score = original->score;
     return rect;
-}
-
-double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
-    double sum_sq = 0.0;
-    if (a->cols != b->cols || a->rows != b->rows) {
-        fprintf(stderr, "Dimensions do not match.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    int* diff = malloc(sizeof(int) * 4);
-    for (int i = 0; i < a->rows; i++) {
-        for (int j = 0; j < a->cols; j++) {
-            unsigned char* aColors = &(a->data[i][j]);
-            unsigned char* bColors = &(b->data[i][j]);
-            for (int k = 0; k < 4; k++) {
-                diff[k] = aColors[k] - bColors[k];
-                diff[k] = diff[k] * diff[k];
-            }
-            double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
-            sum_sq += err * err;
-        }
-    }
-    free(diff);
-
-    double mse = sum_sq / (double)(a->cols * a->rows);
-    return mse;
 }
 
 void drawRectOnDMatrix(Rect* rect, DMatrix* matrix) {
