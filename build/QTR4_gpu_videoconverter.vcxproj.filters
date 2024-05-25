@@ -13,6 +13,9 @@
     <ClCompile Include="D:\OpenclGenetic\src\utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\OpenclGenetic\src\sequential_convert.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\OpenclGenetic\CMakeLists.txt" />

@@ -3,6 +3,7 @@
 #include <CL/cl.h>
 #include <image_presentation.h>
 #include <utils.h>
+#include <sequential_convert.h>
 
 int main()
 {
@@ -17,13 +18,35 @@ int main()
         printf_s("clGetPlatformIDs(%i)\n", CL_err);
     
     printf_s("sex???");
-    DMatrix* m = allocDMatrix(256, 256);
-    Rect* rect = allocRect(16, 16, 64, 64, 0xFF00FFFF);
-
-    displayMatrix(m);
-    displayMatrix(m);
+    DMatrix* currentMatrix = allocDMatrix(256, 256);
+    DMatrix* targetMatrix = createMatrixFromPng("test.png");
     
-    freeDMatrix(m);    
-    free(rect);
+    int rectcount = 128;
+    int mutationsteps = 7;
+    int childrencount = 100;
+
+    
+    for (int i = 0; i < rectcount; i++) {
+        Node* population = getPopulation(currentMatrix, targetMatrix, 1000);
+        for (int j = 0; j < 3; j++) {
+            Node* madeittosex = createSublist(population, 10);
+            freeList(population);
+
+            population = getMutation(madeittosex, currentMatrix, targetMatrix, childrencount);
+            freeList(madeittosex);
+        }
+
+        Rect* rectToApply = allocCopyOfRect(population->rect);
+        freeList(population);
+
+        drawRectOnDMatrix(rectToApply, currentMatrix);
+        free(rectToApply);
+        printf_s("Rect#%i  MSE:%f\n", i+1, mseBetweenDMatrixes(currentMatrix, targetMatrix));
+    }
+    
+    
+    displayMatrix(targetMatrix);
+
+    freeDMatrix(currentMatrix);    
     return 0;
 }

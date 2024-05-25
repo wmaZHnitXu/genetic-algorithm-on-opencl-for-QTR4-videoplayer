@@ -7,6 +7,9 @@
         "chrono": "c",
         "functional": "c",
         "imagepresentation.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "sequential_convert.h": "c",
+        "dmatrix.h": "c",
+        "utils.h": "c"
     }
 }

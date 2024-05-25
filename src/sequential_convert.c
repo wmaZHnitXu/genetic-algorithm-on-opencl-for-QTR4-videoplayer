@@ -1,29 +1,123 @@
 #include <sequential_convert.h>
 #include <stdlib.h>
 
-Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount) {
-    for (int i = 0; i < rectCount; i++) {
-
-    }
-}
-
-double evalRectOnDMatrix(Rect rect, DMatrix *current, DMatrix *target, double prevMse) {
+double evalRectOnDMatrix(Rect *rect, DMatrix *current, DMatrix *target, double prevMse) {
     DMatrix *copyOfCurrent = allocDMatrix(current->rows, current->cols);
 
     for (int i = 0; i < current->rows; i++) {
         for (int j = 0; j < current->cols; j++) {
             copyOfCurrent->data[i][j] = current->data[i][j];
         }
-    }
+    } 
 
+    drawRectOnDMatrix(rect, copyOfCurrent);
     double nextMse = mseBetweenDMatrixes(copyOfCurrent, target);
     freeDMatrix(copyOfCurrent);
 
     return prevMse - nextMse;
 }
 
+Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount) {
+    double mse = mseBetweenDMatrixes(current, target);
+    struct Node* head = NULL;
+
+    for (int i = 0; i < rectCount; i++) {
+        Rect *rect = createRandomRect();
+        if (rect->x + rect->width > 256) rect->width = 256 - rect->x;
+        if (rect->y + rect->height > 256) rect->height = 256 - rect->y;
+
+        rect->color = getAvgColor(rect, target);
+        rect->score = evalRectOnDMatrix(rect, current, target, mse);
+        
+        if (head == NULL) {
+            insertAtBeginning(&head, rect);
+        }
+        else {
+            Node *prev = NULL;
+            Node *cur = head;
+            while (cur->rect->score > rect->score) {
+                prev = cur;
+                cur = cur->next;
+                if (cur == NULL) {
+                    break;
+                }
+            }
+            if (prev == NULL) {
+                insertAtBeginning(&head, rect);
+            }
+            else {
+                prev->next = createNode(rect);
+                if (cur != NULL && cur != head) {
+                    prev->next->next = cur;
+                }
+            }
+        }
+    }
+
+    return head;
+}
+
+Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int childrenCount) {
+    double mse = mseBetweenDMatrixes(current, target);
+    struct Node *head = NULL;
+    Node *currentParentNode = prevGen;
+
+    while (currentParentNode != NULL) {
+        for (int j = 0; j < childrenCount; j++) {
+            Rect *rect = allocCopyOfRect(currentParentNode->rect);
+
+            //MUTATION
+            rect->x += rand31() - 16;
+            rect->y += rand31() - 16;
+            if (rect->x > 255) rect->x = 255;
+            if (rect->y > 255) rect->y = 255;
+            if (rect->x < 0) rect->x = 0;
+            if (rect->y < 0) rect->y = 0;
+
+            rect->width += rand31() - 16;
+            rect->height += rand31() - 16;
+            if (rect->x + rect->width > 256) rect->width = 256 - rect->x;
+            if (rect->y + rect->height > 256) rect->height = 256 - rect->y;
+            if (rect->width < 1) rect->width = 1;
+            if (rect->height < 1) rect->height = 1;
+
+            rect->color = getAvgColor(rect, target);
+            rect->score = evalRectOnDMatrix(rect, current, target, mse);
+            
+            if (head == NULL) {
+                insertAtBeginning(&head, rect);
+            }
+            else {
+                Node *prev = NULL;
+                Node *cur = head;
+                while (cur->rect->score > rect->score) {
+                    prev = cur;
+                    cur = cur->next;
+                    if (cur == NULL) {
+                        break;
+                    }
+                }
+                if (prev == NULL) {
+                    insertAtBeginning(&head, rect);
+                }
+                else {
+                    prev->next = createNode(rect);
+                    if (cur != NULL && cur != head) {
+                        prev->next->next = cur;
+                    }
+                }
+            }
+        }
+
+        currentParentNode = currentParentNode->next;
+    }
+
+    return head;   
+}
+
 Rect *createRandomRect() {
     Rect *rect = allocRect(rand255(), rand255(), rand255(), rand255(), 0xFF0000FF);
+    return rect;
 }
 
 int getAvgColor(Rect *rect, DMatrix *target) {

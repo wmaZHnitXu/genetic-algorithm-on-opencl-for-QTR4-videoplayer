@@ -1,9 +1,8 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <dmatrix.h>
-
-double mseBetweenDMatrixes(DMatrix* a, DMatrix* b);
 
 typedef struct {
     int x;
@@ -14,31 +13,34 @@ typedef struct {
     double score;
 } Rect;
 
-void drawRectOnDMatrix(Rect* rect, DMatrix* matrix);
-
-Rect* allocRect(int x, int y, int width, int height, int color);
-
-typedef struct {
+typedef struct Node {
     Rect* rect;
-    struct Node* next;
+    struct Node* next; // Correctly referencing the Node struct
 } Node;
 
 // Function prototypes
 
 // Function to create a new node
-struct Node* createNode(int data);
+Node* createNode(Rect* rect);
 
 // Function to insert a node at the beginning of the list
-void insertAtBeginning(struct Node** head_ref, int new_data);
+void insertAtBeginning(Node** head_ref, Rect* rect);
 
 // Function to insert a node at the end of the list
-void insertAtEnd(struct Node** head_ref, int new_data);
+void insertAtEnd(Node** head_ref, Rect* rect);
 
 // Function to delete a node with a specific key
-void deleteNode(struct Node** head_ref, int key);
+void deleteNode(Node** head_ref, Rect* key);
 
 // Function to print the linked list
-void printList(struct Node* node);
+void printList(Node* node);
 
 // Function to free the entire linked list
-void freeList(struct Node* head);
+void freeList(Node* head);
+int countList(Node* head);
+Node* createSublist(Node* original, int count);
+
+double mseBetweenDMatrixes(DMatrix* a, DMatrix* b);
+void drawRectOnDMatrix(Rect* rect, DMatrix* matrix);
+Rect* allocRect(int x, int y, int width, int height, int color);
+Rect* allocCopyOfRect(Rect* original);

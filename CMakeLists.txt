@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME}
     src/main.c
     src/dmatrix.c
     src/utils.c
+    src/sequential_convert.c
 )
 
 include_directories(include)

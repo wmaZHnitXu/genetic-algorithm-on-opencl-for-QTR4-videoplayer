@@ -382,6 +382,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\OpenclGenetic\src\main.c" />
     <ClCompile Include="D:\OpenclGenetic\src\dmatrix.c" />
     <ClCompile Include="D:\OpenclGenetic\src\utils.c" />
+    <ClCompile Include="D:\OpenclGenetic\src\sequential_convert.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\OpenclGenetic\build\ZERO_CHECK.vcxproj">
