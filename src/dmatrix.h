@@ -13,3 +13,4 @@ DMatrix* allocDMatrix(int rows, int cols);
 void freeDMatrix(DMatrix* m);
 
 void setDMatrixElem(DMatrix* m, int row, int col, int value);
+int getDMatrixElem(DMatrix* m, int row, int col);

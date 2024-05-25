@@ -1,11 +1,8 @@
-// C standard includes
 #include <stdio.h>
 
-// OpenCL includes
 #include <CL/cl.h>
 #include <image_presentation.h>
-#include <dmatrix.h>
-
+#include <utils.h>
 
 int main()
 {
@@ -20,7 +17,19 @@ int main()
         printf_s("clGetPlatformIDs(%i)\n", CL_err);
     
     printf_s("sex???");
-    DMatrix *m = createMatrixFromPng("test.png");
+    DMatrix* m = allocDMatrix(256, 256);
+    Rect* rect = allocRect(16, 16, 64, 64, 0xFF00FFFF);
+    DMatrix* m2 = allocDMatrix(256, 256);
+    Rect* rect2 = allocRect(16, 16, 64, 64, 0xFF00FF00);
+    drawRectOnDMatrix(rect, m);
+    drawRectOnDMatrix(rect2, m2);
+
+    printf_s("mse: %f\n", mseBetweenDMatrixes(m, m2));
     displayMatrix(m);
+    
+    freeDMatrix(m);
+    freeDMatrix(m2);
+    free(rect);
+    free(rect2);
     return 0;
 }

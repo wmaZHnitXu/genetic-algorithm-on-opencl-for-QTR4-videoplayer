@@ -24,7 +24,7 @@ events:
       The output was:
       0
       Версия MSBuild 17.9.8+b34f75857 для .NET Framework
-      Сборка начата 24.05.2024 23:59:19.
+      Сборка начата 25.05.2024 3:09:25.
       
       Проект "D:\\OpenclGenetic\\build\\CMakeFiles\\3.29.0-rc3\\CompilerIdC\\CompilerIdC.vcxproj" в узле 1 (целевые объекты по умолчанию).
       PrepareForBuild:
@@ -53,7 +53,7 @@ events:
           Предупреждений: 0
           Ошибок: 0
       
-      Прошло времени 00:00:01.04
+      Прошло времени 00:00:00.46
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -72,8 +72,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-6jjtlk"
-      binary: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-6jjtlk"
+      source: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-1tsuue"
+      binary: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-1tsuue"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       VCPKG_APPLOCAL_DEPS: "ON"
@@ -83,33 +83,33 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-6jjtlk'
+        Change Dir: 'D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-1tsuue'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d7f48.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a3e7e.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Версия MSBuild 17.9.8+b34f75857 для .NET Framework
-        Сборка начата 24.05.2024 23:59:21.
+        Сборка начата 25.05.2024 3:09:26.
         
-        Проект "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jjtlk\\cmTC_d7f48.vcxproj" в узле 1 (целевые объекты по умолчанию).
+        Проект "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1tsuue\\cmTC_a3e7e.vcxproj" в узле 1 (целевые объекты по умолчанию).
         PrepareForBuild:
-          Создание каталога "cmTC_d7f48.dir\\Debug\\".
+          Создание каталога "cmTC_a3e7e.dir\\Debug\\".
           Структурированный вывод включен. Форматирование диагностики компилятора будет отражать иерархию ошибок. Подробнее см. https://aka.ms/cpp/structured-output.
-          Создание каталога "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jjtlk\\Debug\\".
-          Создание каталога "cmTC_d7f48.dir\\Debug\\cmTC_d7f48.tlog\\".
+          Создание каталога "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1tsuue\\Debug\\".
+          Создание каталога "cmTC_a3e7e.dir\\Debug\\cmTC_a3e7e.tlog\\".
         InitializeBuildStatus:
-          Создание "cmTC_d7f48.dir\\Debug\\cmTC_d7f48.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
-          Обращение к "cmTC_d7f48.dir\\Debug\\cmTC_d7f48.tlog\\unsuccessfulbuild".
+          Создание "cmTC_a3e7e.dir\\Debug\\cmTC_a3e7e.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
+          Обращение к "cmTC_a3e7e.dir\\Debug\\cmTC_a3e7e.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d7f48.dir\\Debug\\\\" /Fd"cmTC_d7f48.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a3e7e.dir\\Debug\\\\" /Fd"cmTC_a3e7e.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
           Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.39.33523 для x64
           (C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d7f48.dir\\Debug\\\\" /Fd"cmTC_d7f48.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a3e7e.dir\\Debug\\\\" /Fd"cmTC_a3e7e.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.29\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jjtlk\\Debug\\cmTC_d7f48.exe" /INCREMENTAL /ILK:"cmTC_d7f48.dir\\Debug\\cmTC_d7f48.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-6jjtlk/Debug/cmTC_d7f48.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-6jjtlk/Debug/cmTC_d7f48.lib" /MACHINE:X64  /machine:x64 cmTC_d7f48.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_d7f48.vcxproj -> D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jjtlk\\Debug\\cmTC_d7f48.exe
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1tsuue\\Debug\\cmTC_a3e7e.exe" /INCREMENTAL /ILK:"cmTC_a3e7e.dir\\Debug\\cmTC_a3e7e.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-1tsuue/Debug/cmTC_a3e7e.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-1tsuue/Debug/cmTC_a3e7e.lib" /MACHINE:X64  /machine:x64 cmTC_a3e7e.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_a3e7e.vcxproj -> D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1tsuue\\Debug\\cmTC_a3e7e.exe
         PostBuildEvent:
           setlocal
-          C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noprofile -executionpolicy Bypass -file D:/OpenclGenetic/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-6jjtlk/Debug/cmTC_d7f48.exe -installedDir D:/OpenclGenetic/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+          C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noprofile -executionpolicy Bypass -file D:/OpenclGenetic/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-1tsuue/Debug/cmTC_a3e7e.exe -installedDir D:/OpenclGenetic/vcpkg/installed/x64-windows/debug/bin -OutVariable out
           if %errorlevel% neq 0 goto :cmEnd
           :cmEnd
           endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
@@ -119,15 +119,15 @@ events:
           if %errorlevel% neq 0 goto :VCEnd
           :VCEnd
         FinalizeBuildStatus:
-          Файл "cmTC_d7f48.dir\\Debug\\cmTC_d7f48.tlog\\unsuccessfulbuild" удаляется.
-          Обращение к "cmTC_d7f48.dir\\Debug\\cmTC_d7f48.tlog\\cmTC_d7f48.lastbuildstate".
-        Сборка проекта "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jjtlk\\cmTC_d7f48.vcxproj" завершена (целевые объекты по умолчанию).
+          Файл "cmTC_a3e7e.dir\\Debug\\cmTC_a3e7e.tlog\\unsuccessfulbuild" удаляется.
+          Обращение к "cmTC_a3e7e.dir\\Debug\\cmTC_a3e7e.tlog\\cmTC_a3e7e.lastbuildstate".
+        Сборка проекта "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-1tsuue\\cmTC_a3e7e.vcxproj" завершена (целевые объекты по умолчанию).
         
         Сборка успешно завершена.
             Предупреждений: 0
             Ошибок: 0
         
-        Прошло времени 00:00:01.33
+        Прошло времени 00:00:00.95
         
       exitCode: 0
   -
@@ -171,8 +171,8 @@ events:
     checks:
       - "Looking for CL_VERSION_3_0"
     directories:
-      source: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-7fdh34"
-      binary: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-7fdh34"
+      source: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-rgbqmq"
+      binary: "D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-rgbqmq"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       VCPKG_APPLOCAL_DEPS: "ON"
@@ -182,34 +182,34 @@ events:
       variable: "OPENCL_VERSION_3_0"
       cached: true
       stdout: |
-        Change Dir: 'D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-7fdh34'
+        Change Dir: 'D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-rgbqmq'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_3bca8.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_29da4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Версия MSBuild 17.9.8+b34f75857 для .NET Framework
-        Сборка начата 24.05.2024 23:59:23.
+        Сборка начата 25.05.2024 3:09:27.
         
-        Проект "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7fdh34\\cmTC_3bca8.vcxproj" в узле 1 (целевые объекты по умолчанию).
+        Проект "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rgbqmq\\cmTC_29da4.vcxproj" в узле 1 (целевые объекты по умолчанию).
         PrepareForBuild:
-          Создание каталога "cmTC_3bca8.dir\\Debug\\".
+          Создание каталога "cmTC_29da4.dir\\Debug\\".
           Структурированный вывод включен. Форматирование диагностики компилятора будет отражать иерархию ошибок. Подробнее см. https://aka.ms/cpp/structured-output.
-          Создание каталога "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7fdh34\\Debug\\".
-          Создание каталога "cmTC_3bca8.dir\\Debug\\cmTC_3bca8.tlog\\".
+          Создание каталога "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rgbqmq\\Debug\\".
+          Создание каталога "cmTC_29da4.dir\\Debug\\cmTC_29da4.tlog\\".
         InitializeBuildStatus:
-          Создание "cmTC_3bca8.dir\\Debug\\cmTC_3bca8.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
-          Обращение к "cmTC_3bca8.dir\\Debug\\cmTC_3bca8.tlog\\unsuccessfulbuild".
+          Создание "cmTC_29da4.dir\\Debug\\cmTC_29da4.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
+          Обращение к "cmTC_29da4.dir\\Debug\\cmTC_29da4.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\OpenclGenetic\\build\\vcpkg_installed\\x64-windows\\include" /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3bca8.dir\\Debug\\\\" /Fd"cmTC_3bca8.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7fdh34\\CheckSymbolExists.c"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\OpenclGenetic\\build\\vcpkg_installed\\x64-windows\\include" /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_29da4.dir\\Debug\\\\" /Fd"cmTC_29da4.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rgbqmq\\CheckSymbolExists.c"
           Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.39.33523 для x64
           (C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
-          cl /c /I"D:\\OpenclGenetic\\build\\vcpkg_installed\\x64-windows\\include" /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3bca8.dir\\Debug\\\\" /Fd"cmTC_3bca8.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7fdh34\\CheckSymbolExists.c"
+          cl /c /I"D:\\OpenclGenetic\\build\\vcpkg_installed\\x64-windows\\include" /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_29da4.dir\\Debug\\\\" /Fd"cmTC_29da4.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rgbqmq\\CheckSymbolExists.c"
           CheckSymbolExists.c
           cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 300 (OpenCL 3.0)
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7fdh34\\Debug\\cmTC_3bca8.exe" /INCREMENTAL /ILK:"cmTC_3bca8.dir\\Debug\\cmTC_3bca8.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-7fdh34/Debug/cmTC_3bca8.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-7fdh34/Debug/cmTC_3bca8.lib" /MACHINE:X64  /machine:x64 cmTC_3bca8.dir\\Debug\\CheckSymbolExists.obj
-          cmTC_3bca8.vcxproj -> D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7fdh34\\Debug\\cmTC_3bca8.exe
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rgbqmq\\Debug\\cmTC_29da4.exe" /INCREMENTAL /ILK:"cmTC_29da4.dir\\Debug\\cmTC_29da4.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-rgbqmq/Debug/cmTC_29da4.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-rgbqmq/Debug/cmTC_29da4.lib" /MACHINE:X64  /machine:x64 cmTC_29da4.dir\\Debug\\CheckSymbolExists.obj
+          cmTC_29da4.vcxproj -> D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rgbqmq\\Debug\\cmTC_29da4.exe
         PostBuildEvent:
           setlocal
-          C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noprofile -executionpolicy Bypass -file D:/OpenclGenetic/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-7fdh34/Debug/cmTC_3bca8.exe -installedDir D:/OpenclGenetic/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+          C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -noprofile -executionpolicy Bypass -file D:/OpenclGenetic/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/OpenclGenetic/build/CMakeFiles/CMakeScratch/TryCompile-rgbqmq/Debug/cmTC_29da4.exe -installedDir D:/OpenclGenetic/vcpkg/installed/x64-windows/debug/bin -OutVariable out
           if %errorlevel% neq 0 goto :cmEnd
           :cmEnd
           endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
@@ -219,15 +219,15 @@ events:
           if %errorlevel% neq 0 goto :VCEnd
           :VCEnd
         FinalizeBuildStatus:
-          Файл "cmTC_3bca8.dir\\Debug\\cmTC_3bca8.tlog\\unsuccessfulbuild" удаляется.
-          Обращение к "cmTC_3bca8.dir\\Debug\\cmTC_3bca8.tlog\\cmTC_3bca8.lastbuildstate".
-        Сборка проекта "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7fdh34\\cmTC_3bca8.vcxproj" завершена (целевые объекты по умолчанию).
+          Файл "cmTC_29da4.dir\\Debug\\cmTC_29da4.tlog\\unsuccessfulbuild" удаляется.
+          Обращение к "cmTC_29da4.dir\\Debug\\cmTC_29da4.tlog\\cmTC_29da4.lastbuildstate".
+        Сборка проекта "D:\\OpenclGenetic\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rgbqmq\\cmTC_29da4.vcxproj" завершена (целевые объекты по умолчанию).
         
         Сборка успешно завершена.
             Предупреждений: 0
             Ошибок: 0
         
-        Прошло времени 00:00:01.00
+        Прошло времени 00:00:00.81
         
       exitCode: 0
 ...

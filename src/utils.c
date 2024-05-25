@@ -1,4 +1,5 @@
 #include <utils.h>
+#include <math.h>
 
 // Function to create a new node
 struct Node* create_node(int data) {
@@ -80,7 +81,7 @@ void free_list(struct Node* head) {
     }
 }
 
-Rect* allocateRect(int x, int y, int width, int height, int color) {
+Rect* allocRect(int x, int y, int width, int height, int color) {
     Rect* rect = (Rect*)malloc(sizeof(Rect));
     rect->x = x;
     rect->y = y;
@@ -90,12 +91,48 @@ Rect* allocateRect(int x, int y, int width, int height, int color) {
     return rect;
 }
 
-float mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
-    float err = 0.0f;
+double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
+    double sum_sq = 0.0;
     if (a->cols != b->cols || a->rows != b->cols) {
-        fprintf(stderr, "Dimensions does not match.\n");
+        fprintf(stderr, "Dimensions do not match.\n");
         exit(EXIT_FAILURE);
     }
 
-    
+    int* diff = malloc(sizeof(int) * 4);
+    for (int i = 0; i < a->rows; i++) {
+        for (int j = 0; j < a->cols; j++) {
+            unsigned char* aColors = &(a->data[i][j]);
+            unsigned char* bColors = &(b->data[i][j]);
+            for (int k = 0; k < 4; k++) {
+                diff[k] = aColors[k] - bColors[k];
+                diff[k] = diff[k] * diff[k];
+            }
+            double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
+            sum_sq += err * err;
+        }
+    }
+    free(diff);
+
+    double mse = sum_sq / (double)(a->cols * a->rows);
+    return mse;
+
+}
+
+void drawRectOnDMatrix(Rect* rect, DMatrix* matrix) {
+    int w = matrix->cols;
+    int h = matrix->rows;
+
+    int x_start = rect->x;
+    int x_end = rect->x + rect->width;
+    x_end = x_end < w ? x_end : w;
+
+    int y_start = rect->y;
+    int y_end = rect->y + rect->height;
+    y_end = y_end < h ? y_end : h;
+
+    for (int i = y_start; i < y_end; i++) {
+        for (int j = x_start; j < x_end; j++) {
+            matrix->data[i][j] = rect->color;
+        }
+    }
 }

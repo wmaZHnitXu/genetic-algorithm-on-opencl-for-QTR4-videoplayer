@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
     src/image_presentation.c
     src/main.c
     src/dmatrix.c
+    src/utils.c
 )
 
 include_directories(include)

@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <dmatrix.h>
@@ -27,7 +28,7 @@ void print_list(struct Node* node);
 // Function to free the entire linked list
 void free_list(struct Node* head);
 
-float mseBetweenDMatrixes(DMatrix* a, DMatrix* b);
+double mseBetweenDMatrixes(DMatrix* a, DMatrix* b);
 
 typedef struct {
     int x;
@@ -36,3 +37,7 @@ typedef struct {
     int height;
     int color;
 } Rect;
+
+void drawRectOnDMatrix(Rect* rect, DMatrix* matrix);
+
+Rect* allocRect(int x, int y, int width, int height, int color);
