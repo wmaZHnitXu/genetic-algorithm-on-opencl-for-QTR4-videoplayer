@@ -186,7 +186,7 @@ void displayMatrix(DMatrix* matrix) {
 
     for(int y = 0; y < surface->h; y++) {
         for(int x = 0; x < surface->w; x++) {
-            Uint32 color = matrix->data[y][x];
+            Uint32 color = matrix->data[y * w + x];
             int index = (y * surface->w) + x;
             pixels[index] = color;
         }

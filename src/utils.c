@@ -171,7 +171,8 @@ void drawRectOnDMatrix(Rect* rect, DMatrix* matrix) {
 
     for (int i = y_start; i < y_end; i++) {
         for (int j = x_start; j < x_end; j++) {
-            matrix->data[i][j] = rect->color;
+            int width = matrix->cols;
+            matrix->data[i * width + j] = rect->color;
         }
     }
 }

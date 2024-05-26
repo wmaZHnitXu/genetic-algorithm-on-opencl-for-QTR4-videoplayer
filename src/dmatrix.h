@@ -5,7 +5,7 @@
 typedef struct {
     int rows;
     int cols;
-    int** data;
+    int* data;
 } DMatrix;
 
 DMatrix* allocDMatrix(int rows, int cols);

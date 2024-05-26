@@ -1,14 +1,15 @@
 #include <sequential_convert.h>
 #include <stdlib.h>
+#include <windows.h>
 
-double mseMemMatrix[1024][1024];
+double mseMemMatrix[1024 * 1024];
 
 double evalRectOnDMatrix(Rect *rect, DMatrix *current, DMatrix *target, double prevMse) {
     DMatrix *copyOfCurrent = allocDMatrix(current->rows, current->cols);
 
     for (int i = 0; i < current->rows; i++) {
         for (int j = 0; j < current->cols; j++) {
-            copyOfCurrent->data[i][j] = current->data[i][j];
+            setDMatrixElem(copyOfCurrent, i, j, getDMatrixElem(current, i, j));
         }
     } 
 
@@ -19,9 +20,7 @@ double evalRectOnDMatrix(Rect *rect, DMatrix *current, DMatrix *target, double p
     return prevMse - nextMse;
 }
 
-Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount, int finalRectCount) {
-    double mse = mseBetweenDMatrixes(current, target);
-
+Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount, int finalRectCount, double mse, int num) {
 
     struct Node* head = NULL;
     Rect *rect = NULL;
@@ -29,8 +28,8 @@ Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount, int finalR
     for (int i = 0; i < rectCount; i++) {
         if (rect == NULL) rect = createRandomRect();
         else {
-            rect->width = rand255();
-            rect->height = rand255();
+            rect->width = num > 12 ? (num > 512 ? rand5() : rand8()): rand255();
+            rect->height = num > 12 ? (num > 512 ? rand5() : rand8()): rand255();
             rect->x = rand255();
             rect->y = rand255();
         }
@@ -73,11 +72,23 @@ Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount, int finalR
         }
     }
 
+    free(rect);
+
     return head;
 }
 
-Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int childrenCount, int finalRectCount) {
-    double mse = mseBetweenDMatrixes(current, target);
+Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int childrenCount, int finalRectCount, double mse) {
+
+    /*
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER t1, t2;           // ticks
+    double elapsedTime;
+    // get ticks per second
+    QueryPerformanceFrequency(&frequency);
+    // start timer
+    QueryPerformanceCounter(&t1);
+    */
+
     struct Node *head = NULL;
     Node *currentParentNode = prevGen;
 
@@ -140,6 +151,15 @@ Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int children
         currentParentNode = currentParentNode->next;
     }
 
+    free(rect);
+
+    /*
+    QueryPerformanceCounter(&t2);
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("Mutation done in %f ms.\n", elapsedTime);
+    */
+
     return head;   
 }
 
@@ -155,21 +175,21 @@ double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
         exit(EXIT_FAILURE);
     }
 
-    int* diff = malloc(sizeof(int) * 4);
+    int diff[4];
+    int width = a->cols;
     for (int i = 0; i < a->rows; i++) {
         for (int j = 0; j < a->cols; j++) {
-            unsigned char* aColors = &(a->data[i][j]);
-            unsigned char* bColors = &(b->data[i][j]);
+            unsigned char* aColors = &(a->data[i * width + j]);
+            unsigned char* bColors = &(b->data[i * width + j]);
             for (int k = 0; k < 4; k++) {
                 diff[k] = aColors[k] - bColors[k];
                 diff[k] = diff[k] * diff[k];
             }
             double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
-            mseMemMatrix[i][j] = err * err;
+            mseMemMatrix[i * width + j] = err * err;
             sum_sq += err * err;
         }
     }
-    free(diff);
 
     double mse = sum_sq / (double)(a->cols * a->rows);
     return mse;
@@ -190,11 +210,14 @@ double optimisedEvalRectOnMatrix(Rect *rect, DMatrix *current, DMatrix *target, 
     int y_end = rect->y + rect->height;
     y_end = y_end < h ? y_end : h;
 
-    int* diff = malloc(sizeof(int) * 4);
+    unsigned char* color = (unsigned char*)&rect->color;
+
+    int width = target->cols;
+
     for (int i = y_start; i < y_end; i++) {
         for (int j = x_start; j < x_end; j++) {
-            unsigned char* targetColor = &(target->data[i][j]);
-            unsigned char* color = &(rect->color);
+            unsigned char* targetColor = &(target->data[i * width + j]);
+            int diff[4];
             for (int k = 0; k < 4; k++) {
                 diff[k] = color[k] - targetColor[k];
                 diff[k] = diff[k] * diff[k];
@@ -202,15 +225,15 @@ double optimisedEvalRectOnMatrix(Rect *rect, DMatrix *current, DMatrix *target, 
             double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
 
             newSum += err * err;
-            oldSum += mseMemMatrix[i][j];
+            oldSum += mseMemMatrix[i * width + j];
         }
     }
-    free(diff);
 
     double divider = current->cols * current->rows;
-    double mse = oldSum / divider - newSum / divider;
+    double mse = (oldSum - newSum) / divider;
     return mse;
 }
+
 
 int getAvgColor(Rect *rect, DMatrix *target) {
     int w = target->cols;
@@ -224,14 +247,15 @@ int getAvgColor(Rect *rect, DMatrix *target) {
     int y_end = rect->y + rect->height;
     y_end = y_end < h ? y_end : h;
 
-    int* channelSumms = malloc(sizeof(int) * 4);
+    int channelSumms[4];
     for (int k = 0; k < 4; k++) channelSumms[k] = 0;
     unsigned char* test = NULL;
     int pxCount = 0;
 
+    int width = target->cols;
     for (int i = y_start; i < y_end; i++) {
         for (int j = x_start; j < x_end; j++) {
-            unsigned char* colors = &(target->data[i][j]);
+            unsigned char* colors = &(target->data[i * width + j]);
             for (int k = 0; k < 4; k++) {
                 channelSumms[k] += colors[k];
             }
@@ -243,17 +267,18 @@ int getAvgColor(Rect *rect, DMatrix *target) {
 
     //0xFFFFFFFF
     //   3 2 1 0
-
-    double r = (double)(channelSumms[2]) / (double)pxCount;
-    double g = (double)(channelSumms[1]) / (double)pxCount;
-    double b = (double)(channelSumms[0]) / (double)pxCount;
+    if (pxCount == 0) {
+        return 0x00000000;
+    }
+    int r = channelSumms[2] / pxCount;
+    int g = channelSumms[1] / pxCount;
+    int b = channelSumms[0] / pxCount;
     //printf("r%ig%ib%i %f\n", channelSumms[2], channelSumms[1], channelSumms[0], g);
 
     int result = 0xFF000000;
-    result += (int)r * 0x00010000;
-    result += (int)g * 0x00000100;
-    result += (int)b * 0x00000001;
-    free(channelSumms);
+    result += r * 0x00010000;
+    result += g * 0x00000100;
+    result += b * 0x00000001;
     return result;
 }
 
@@ -263,5 +288,9 @@ int rand255() {
 
 int rand8() {
     return rand() % 9;
+}
+
+int rand5() {
+    return rand() % 6;
 }
 

@@ -4,6 +4,7 @@
 #include <image_presentation.h>
 #include <utils.h>
 #include <sequential_convert.h>
+#include <windows.h>
 
 int main()
 {
@@ -21,17 +22,32 @@ int main()
     DMatrix* currentMatrix = allocDMatrix(256, 256);
     DMatrix* targetMatrix = createMatrixFromPng("test.png");
     
-    int rectcount = 1024;
-    int mutationsteps = 7;
+    int rectcount = 6144;
+    int mutationsteps = 5;
     int childrencount = 100;
 
+    ///*
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER t1, t2;           // ticks
+    double elapsedTime;
+    // get ticks per second
+    QueryPerformanceFrequency(&frequency);
+    //*/
+
+    double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
     for (int i = 0; i < rectcount; i++) {
-        Node* population = getPopulation(currentMatrix, targetMatrix, 1000, 10);
+
+        if (i == rectcount - 256) {
+            // start timer
+            QueryPerformanceCounter(&t1);
+        }
+
+        Node* population = getPopulation(currentMatrix, targetMatrix, 1000, 10, mse, i);
         for (int j = 0; j < mutationsteps; j++) {
-            Node* madeittosex = createSublist(population, 10);
+            Node* madeittosex = createSublist(population, 7);
             freeList(population);
 
-            population = getMutation(madeittosex, currentMatrix, targetMatrix, childrencount, 10);
+            population = getMutation(madeittosex, currentMatrix, targetMatrix, childrencount, 10, mse);
             freeList(madeittosex);
         }
 
@@ -39,14 +55,18 @@ int main()
         freeList(population);
 
         drawRectOnDMatrix(rectToApply, currentMatrix);
-        printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, mseBetweenDMatrixes(currentMatrix, targetMatrix), rectToApply->color);
+        mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
+        printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, mse, rectToApply->color);
         free(rectToApply);
     }
+
+    ///*
+    QueryPerformanceCounter(&t2);
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("256 done in %f ms.\n", elapsedTime);
+    //*/
     
-    
-    Rect* whole = allocRect(0, 0, 256, 256, 0x00000000);
-    int color = getAvgColor(whole, targetMatrix);
-    printf_s("color:0x%08x\n", color);
     //drawRectOnDMatrix(allocRect(128, 128, 128, 128, 0xFFFF00FF), currentMatrix);
     
     displayMatrix(currentMatrix);
