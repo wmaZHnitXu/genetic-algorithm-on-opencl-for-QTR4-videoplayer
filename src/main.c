@@ -19,10 +19,10 @@ int main()
         printf_s("clGetPlatformIDs(%i)\n", CL_err);
     
     printf_s("sex???");
-    DMatrix* targetMatrix = createMatrixFromPng("test2.png");
+    DMatrix* targetMatrix = createMatrixFromPng("test.png");
     DMatrix* currentMatrix = allocDMatrix(targetMatrix->cols, targetMatrix->rows);
     
-    int rectcount = 6144;
+    int rectcount = 3072;
     int mutationsteps = 3;
     int childrencount = 250;
 

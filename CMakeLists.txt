@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME}
     src/dmatrix.c
     src/utils.c
     src/sequential_convert.c
+    src/opencl_stuff.c
 )
 
 include_directories(include)
