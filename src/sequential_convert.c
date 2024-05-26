@@ -5,7 +5,7 @@
 double mseMemMatrix[1024 * 1024];
 
 double evalRectOnDMatrix(Rect *rect, DMatrix *current, DMatrix *target, double prevMse) {
-    DMatrix *copyOfCurrent = allocDMatrix(current->rows, current->cols);
+    DMatrix *copyOfCurrent = allocDMatrix(current->cols, current->rows);
 
     for (int i = 0; i < current->rows; i++) {
         for (int j = 0; j < current->cols; j++) {
@@ -171,7 +171,7 @@ Rect *createRandomRect() {
 double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
     double sum_sq = 0.0;
     if (a->cols != b->cols || a->rows != b->rows) {
-        fprintf(stderr, "Dimensions do not match.\n");
+        fprintf(stderr, "Dimensions do not match. %ix%i != %ix%i\n", a->cols, a->rows, b->cols, b->rows);
         exit(EXIT_FAILURE);
     }
 

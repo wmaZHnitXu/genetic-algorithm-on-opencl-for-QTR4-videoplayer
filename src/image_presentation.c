@@ -157,8 +157,8 @@ void displayMatrix(DMatrix* matrix) {
    SDL_Window *window = SDL_CreateWindow("Matrix Display",
                                          SDL_WINDOWPOS_CENTERED,
                                          SDL_WINDOWPOS_CENTERED,
-                                         512,
-                                         512,
+                                         matrix->cols * 2,
+                                         matrix->rows * 2,
                                          0);
 
    if (!window) {

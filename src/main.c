@@ -19,12 +19,12 @@ int main()
         printf_s("clGetPlatformIDs(%i)\n", CL_err);
     
     printf_s("sex???");
-    DMatrix* currentMatrix = allocDMatrix(256, 256);
-    DMatrix* targetMatrix = createMatrixFromPng("test.png");
+    DMatrix* targetMatrix = createMatrixFromPng("test2.png");
+    DMatrix* currentMatrix = allocDMatrix(targetMatrix->cols, targetMatrix->rows);
     
     int rectcount = 6144;
-    int mutationsteps = 5;
-    int childrencount = 100;
+    int mutationsteps = 3;
+    int childrencount = 250;
 
     ///*
     LARGE_INTEGER frequency;        // ticks per second
@@ -37,7 +37,7 @@ int main()
     double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
     for (int i = 0; i < rectcount; i++) {
 
-        if (i == rectcount - 256) {
+        if (i == rectcount - 230) {
             // start timer
             QueryPerformanceCounter(&t1);
         }

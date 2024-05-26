@@ -8,7 +8,7 @@ typedef struct {
     int* data;
 } DMatrix;
 
-DMatrix* allocDMatrix(int rows, int cols);
+DMatrix* allocDMatrix(int cols, int rows);
 
 void freeDMatrix(DMatrix* m);
 
