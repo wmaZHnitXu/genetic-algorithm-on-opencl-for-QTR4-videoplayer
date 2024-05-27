@@ -170,6 +170,7 @@ Rect *createRandomRect() {
 
 double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
     double sum_sq = 0.0;
+    double test = 0;
     if (a->cols != b->cols || a->rows != b->rows) {
         fprintf(stderr, "Dimensions do not match. %ix%i != %ix%i\n", a->cols, a->rows, b->cols, b->rows);
         exit(EXIT_FAILURE);
@@ -179,17 +180,21 @@ double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
     int width = a->cols;
     for (int i = 0; i < a->rows; i++) {
         for (int j = 0; j < a->cols; j++) {
+            
             unsigned char* aColors = &(a->data[i * width + j]);
             unsigned char* bColors = &(b->data[i * width + j]);
             for (int k = 0; k < 4; k++) {
                 diff[k] = aColors[k] - bColors[k];
                 diff[k] = diff[k] * diff[k];
             }
-            double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
+            double err = sqrt((float)(diff[0] + diff[1] + diff[2] + diff[3]));
             mseMemMatrix[i * width + j] = err * err;
             sum_sq += err * err;
+            test += diff[3];
         }
     }
+
+    printf("test %f\n", test);
 
     double mse = sum_sq / (double)(a->cols * a->rows);
     return mse;

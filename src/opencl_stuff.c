@@ -1,7 +1,15 @@
 #include <opencl_stuff.h>
+#include <windows.h>
+
+cl_device_id s_device = NULL;
+cl_context s_context = NULL;
+cl_program s_program = NULL;
+cl_kernel s_kernel = NULL;
+cl_command_queue s_queue = NULL;
+
 
 char* readKernelSource(const char* filename) {
-    FILE* file = fopen(filename, "r");
+    FILE* file = fopen(filename, "rb");
     if (!file) {
         fprintf(stderr, "Could not open kernel file: %s\n", filename);
         exit(EXIT_FAILURE);
@@ -73,9 +81,75 @@ cl_program buildProgram(cl_context ctx, cl_device_id device)  {
 
 void loadAllTheOpenCLStuff() {
     int err = 0;
-    cl_device_id device = createDevice();
-    cl_context context = createContext(&device);
-    cl_program program = buildProgram(context, device);
-    cl_kernel kernel = clCreateKernel(program, "kernelEntry", &err);
+    s_device = createDevice();
+    s_context = createContext(&s_device);
+    s_program = buildProgram(s_context, s_device);
+    s_kernel = clCreateKernel(s_program, "mse_sum_between_two_matrices", &err);
+    s_queue = clCreateCommandQueue(s_context, s_device, 0, &err);
 
+    if (err) {
+        printf("err 0x%x in load", err);
+    }
+}
+
+void invokeKernel() {
+
+}
+
+double invokeMseKernel(DMatrix* current, DMatrix* target) {
+    int ret = 0;
+    int width = current->cols;
+    int height = current->rows;
+
+    
+
+    cl_mem currentMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, current->cols * current->rows * sizeof(int), current->data, &ret);
+    cl_mem targetMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, target->cols * target->rows * sizeof(int), target->data, &ret);
+    cl_mem mseSumBuffer = clCreateBuffer(s_context, CL_MEM_WRITE_ONLY, sizeof(int), NULL, &ret);
+
+    int initial_result = 0;
+    ret = clEnqueueWriteBuffer(s_queue, mseSumBuffer, CL_TRUE, 0, sizeof(int), &initial_result, 0, NULL, NULL);
+
+    ret = clSetKernelArg(s_kernel, 0, sizeof(cl_mem), (void*)&currentMatrixBuffer);
+    ret = clSetKernelArg(s_kernel, 1, sizeof(cl_mem), (void*)&targetMatrixBuffer);
+    ret = clSetKernelArg(s_kernel, 2, sizeof(cl_mem), (void*)&mseSumBuffer);
+    ret = clSetKernelArg(s_kernel, 3, sizeof(int), (void*)&width);
+    ret = clSetKernelArg(s_kernel, 4, sizeof(int), (void*)&height);
+
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER t1, t2;           // ticks
+    double elapsedTime;
+    // get ticks per second
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&t1);
+
+
+    size_t globalItemSize[] = {64, 64};
+    ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
+    clFinish(s_queue);
+
+    QueryPerformanceCounter(&t2);
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("256 done in %f ms.\n", elapsedTime);
+
+
+    int result;
+    ret = clEnqueueReadBuffer(s_queue, mseSumBuffer, CL_TRUE, 0, sizeof(int), &result, 0, NULL, NULL);
+    printf("%i\n", result);
+    double finalResult = (double)result * 10.0;
+
+    clReleaseMemObject(currentMatrixBuffer);
+    clReleaseMemObject(targetMatrixBuffer);
+    clReleaseMemObject(mseSumBuffer);
+
+    return finalResult / (double)(width * height);
+}
+
+void clearAllTheOpenCLStuff() {
+    clReleaseKernel(s_kernel);
+    clReleaseCommandQueue(s_queue);
+    clReleaseProgram(s_program);
+    clReleaseContext(s_context);
+    clReleaseDevice(s_device);
 }

@@ -5,6 +5,7 @@
 #include <utils.h>
 #include <sequential_convert.h>
 #include <windows.h>
+#include <opencl_stuff.h>
 
 int main()
 {
@@ -34,7 +35,15 @@ int main()
     QueryPerformanceFrequency(&frequency);
     //*/
 
+    QueryPerformanceCounter(&t1);
+
+    loadAllTheOpenCLStuff();
+    double mseK = invokeMseKernel(currentMatrix, targetMatrix);
+    clearAllTheOpenCLStuff();
+    printf("Kernel returned mse:%f\n", mseK);
+
     double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
+    printf("Sequential mse:%f\n", mse);
     for (int i = 0; i < rectcount; i++) {
 
         if (i == rectcount - 230) {
