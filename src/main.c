@@ -21,35 +21,57 @@ int main()
     
     printf_s("sex???");
     DMatrix* targetMatrix = createMatrixFromPng("test.png");
+    //targetMatrix = allocDMatrix(256, 256);
+    //drawRectOnDMatrix(allocRect(10, 10, 100, 100, 0xFF778822), targetMatrix);
     DMatrix* currentMatrix = allocDMatrix(targetMatrix->cols, targetMatrix->rows);
     
-    int rectcount = 3072;
+    int rectcount = 1024;
     int mutationsteps = 3;
     int childrencount = 250;
 
+    double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);        
+    
     ///*
+    loadAllTheOpenCLStuff();
+
+    uploadTarget(targetMatrix);
+
     LARGE_INTEGER frequency;        // ticks per second
     LARGE_INTEGER t1, t2;           // ticks
     double elapsedTime;
     // get ticks per second
     QueryPerformanceFrequency(&frequency);
-    //*/
-
     QueryPerformanceCounter(&t1);
 
-    loadAllTheOpenCLStuff();
-    double mseK = invokeMseKernel(currentMatrix, targetMatrix);
-    clearAllTheOpenCLStuff();
-    printf("Kernel returned mse:%f\n", mseK);
-
-    double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
-    printf("Sequential mse:%f\n", mse);
     for (int i = 0; i < rectcount; i++) {
+        
+        
+        uploadCurrent(currentMatrix);
 
-        if (i == rectcount - 230) {
-            // start timer
-            QueryPerformanceCounter(&t1);
-        }
+        Rect* rect = invokeKernel(currentMatrix, targetMatrix, i > 10);
+        rect->color = getAvgColor(rect, targetMatrix);
+        drawRectOnDMatrix(rect, currentMatrix);
+        mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
+        printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, mse, rect->color);
+        free(rect);
+
+    }
+
+    QueryPerformanceCounter(&t2);
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("Conversion done in %f ms.\n", elapsedTime);
+
+    clearAllTheOpenCLStuff();
+    //*/
+
+    
+    
+
+    /* SEQUENTIAL
+    printf("Sequential mse:%f\n", mse);
+
+    for (int i = 0; i < rectcount; i++) {
 
         Node* population = getPopulation(currentMatrix, targetMatrix, 1000, 10, mse, i);
         for (int j = 0; j < mutationsteps; j++) {
@@ -68,13 +90,7 @@ int main()
         printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, mse, rectToApply->color);
         free(rectToApply);
     }
-
-    ///*
-    QueryPerformanceCounter(&t2);
-    // compute and print the elapsed time in millisec
-    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("256 done in %f ms.\n", elapsedTime);
-    //*/
+    */
     
     //drawRectOnDMatrix(allocRect(128, 128, 128, 128, 0xFFFF00FF), currentMatrix);
     

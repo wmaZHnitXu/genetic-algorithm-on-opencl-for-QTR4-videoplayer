@@ -305,7 +305,7 @@ DMatrix* createMatrixFromPng(char* path) {
             c++;            
         }
     }
-    printf("Avg color: RGBA(%f, %f, %f)\n", r, g, b);
+    printf("Avg color: RGBA(%f, %f, %f)\n", r / c, g / c, b / c);
 
     // Cleanup
     for (int y = 0; y < height; y++) {

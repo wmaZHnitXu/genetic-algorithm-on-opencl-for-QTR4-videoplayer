@@ -164,7 +164,7 @@ Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int children
 }
 
 Rect *createRandomRect() {
-    Rect *rect = allocRect(rand255(), rand255(), rand255(), rand255(), 0xFF0000FF);
+    Rect *rect = allocRect(rand255(), rand255(), rand255(), rand255(), rand());
     return rect;
 }
 
