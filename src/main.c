@@ -25,13 +25,29 @@ int main()
     //drawRectOnDMatrix(allocRect(10, 10, 100, 100, 0xFF778822), targetMatrix);
     DMatrix* currentMatrix = allocDMatrix(targetMatrix->cols, targetMatrix->rows);
     
-    int rectcount = 1024;
+    int rectcount = 6144;
     int mutationsteps = 3;
     int childrencount = 250;
 
-    double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);        
-    
-    ///*
+    double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
+
+    /* EvalComparison
+    loadAllTheOpenCLStuff();
+
+    for (int i = 0; i < 10; i++) {
+        Rect* randomRect = createRandomRect();
+        randomRect->color = getAvgColor(randomRect, targetMatrix);
+        int seqColor = randomRect->color;
+        double seq = optimisedEvalRectOnMatrix(randomRect, currentMatrix, targetMatrix);
+        double par = invokeEvalKernel(randomRect, currentMatrix, targetMatrix);
+        printf("seq:%f 0x%08x\n", seq, seqColor);
+        printf("par:%f 0x%08x\n", par, randomRect->color);
+    }
+
+    clearAllTheOpenCLStuff();
+    */
+
+    ///* GpuProcessing
     loadAllTheOpenCLStuff();
 
     uploadTarget(targetMatrix);
@@ -51,8 +67,7 @@ int main()
         Rect* rect = invokeKernel(currentMatrix, targetMatrix, i > 10);
         rect->color = getAvgColor(rect, targetMatrix);
         drawRectOnDMatrix(rect, currentMatrix);
-        mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
-        printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, mse, rect->color);
+        printf_s("Rect#%i  score:%f color:0x%08x\n", i+1, rect->score, rect->color);
         free(rect);
 
     }

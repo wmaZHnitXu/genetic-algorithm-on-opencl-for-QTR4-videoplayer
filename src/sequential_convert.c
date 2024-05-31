@@ -37,7 +37,7 @@ Node *getPopulation(DMatrix *current, DMatrix *target, int rectCount, int finalR
         if (rect->y + rect->height > 256) rect->height = 256 - rect->y;
 
         rect->color = getAvgColor(rect, target);
-        rect->score = optimisedEvalRectOnMatrix(rect, current, target, mse);
+        rect->score = optimisedEvalRectOnMatrix(rect, current, target);
         
         if (head == NULL) {
             insertAtBeginning(&head, allocCopyOfRect(rect));
@@ -113,7 +113,7 @@ Node *getMutation(Node *prevGen, DMatrix *current, DMatrix *target, int children
             if (rect->height < 1) rect->height = 1;
 
             rect->color = getAvgColor(rect, target);
-            rect->score = optimisedEvalRectOnMatrix(rect, current, target, mse);
+            rect->score = optimisedEvalRectOnMatrix(rect, current, target);
             
             if (head == NULL) {
                 insertAtBeginning(&head, allocCopyOfRect(rect));
@@ -200,9 +200,9 @@ double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
     return mse;
 }
 
-double optimisedEvalRectOnMatrix(Rect *rect, DMatrix *current, DMatrix *target, double prevMse) {
-    double oldSum = 0.0;
-    double newSum = 0.0;
+double optimisedEvalRectOnMatrix(Rect *rect, DMatrix *current, DMatrix *target) {
+    float oldSum = 0.0;
+    float newSum = 0.0;
 
     int w = target->cols;
     int h = target->rows;
@@ -227,16 +227,16 @@ double optimisedEvalRectOnMatrix(Rect *rect, DMatrix *current, DMatrix *target, 
                 diff[k] = color[k] - targetColor[k];
                 diff[k] = diff[k] * diff[k];
             }
-            double err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
+            float err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
 
             newSum += err * err;
             oldSum += mseMemMatrix[i * width + j];
         }
     }
 
-    double divider = current->cols * current->rows;
-    double mse = (oldSum - newSum) / divider;
-    return mse;
+    float divider = current->cols * current->rows;
+    float mse = (oldSum - newSum) / divider;
+    return (double)mse;
 }
 
 

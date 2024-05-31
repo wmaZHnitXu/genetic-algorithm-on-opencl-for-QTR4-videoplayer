@@ -117,10 +117,22 @@ Rect* invokeKernel(DMatrix* current, DMatrix* target, int startFromLittle) {
     ret = clSetKernelArg(s_kernel, 5, sizeof(int), (void*)&randomSeed);
     ret = clSetKernelArg(s_kernel, 6, sizeof(int), (void*)&startFromLittle);
 
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER t1, t2;           // ticks
+    double elapsedTime;
+    // get ticks per second
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&t1);
 
-    size_t globalItemSize[] = {64, 64};
+
+    size_t globalItemSize[] = {32, 32};
     ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
     clFinish(s_queue);
+
+    QueryPerformanceCounter(&t2);
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("Rect done in %f ms.\n", elapsedTime);
 
     ret = clEnqueueReadBuffer(s_queue, rectArray, CL_TRUE, 0, sizeof(int) * 8 * 8, result, 0, NULL, NULL);
     printf("%i\n", result[0]);
@@ -191,6 +203,50 @@ double invokeMseKernel(DMatrix* current, DMatrix* target) {
     ret = clSetKernelArg(s_kernel, 3, sizeof(int), (void*)&width);
     ret = clSetKernelArg(s_kernel, 4, sizeof(int), (void*)&height);
 
+
+    size_t globalItemSize[] = {256, 256};
+    ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
+    clFinish(s_queue);
+
+    int result;
+    ret = clEnqueueReadBuffer(s_queue, mseSumBuffer, CL_TRUE, 0, sizeof(int), &result, 0, NULL, NULL);
+    printf("%i\n", result);
+    double finalResult = (double)result * 10.0;
+
+    clReleaseMemObject(currentMatrixBuffer);
+    clReleaseMemObject(targetMatrixBuffer);
+    clReleaseMemObject(mseSumBuffer);
+
+    return finalResult / (double)(width * height);
+}
+
+double invokeEvalKernel(Rect* rect, DMatrix* current, DMatrix* target) {
+
+    int ret = 0;
+    int width = current->cols;
+    int height = current->rows;
+
+    
+
+    cl_mem currentMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, current->cols * current->rows * sizeof(int), current->data, &ret);
+    cl_mem targetMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, target->cols * target->rows * sizeof(int), target->data, &ret);
+    cl_mem scoreBuffer = clCreateBuffer(s_context, CL_MEM_WRITE_ONLY, sizeof(int), NULL, &ret);
+    cl_mem colorBuffer = clCreateBuffer(s_context, CL_MEM_WRITE_ONLY, sizeof(int) * 3, NULL, &ret);
+
+    int initial_result = 0;
+    ret = clEnqueueWriteBuffer(s_queue, scoreBuffer, CL_TRUE, 0, sizeof(int), &initial_result, 0, NULL, NULL);
+
+    ret = clSetKernelArg(s_kernel, 0, sizeof(int), (void*)&(rect->x));
+    ret = clSetKernelArg(s_kernel, 1, sizeof(int), (void*)&(rect->y));
+    ret = clSetKernelArg(s_kernel, 2, sizeof(int), (void*)&(rect->width));
+    ret = clSetKernelArg(s_kernel, 3, sizeof(int), (void*)&(rect->height));
+    ret = clSetKernelArg(s_kernel, 4, sizeof(cl_mem), (void*)&currentMatrixBuffer);
+    ret = clSetKernelArg(s_kernel, 5, sizeof(cl_mem), (void*)&targetMatrixBuffer);
+    ret = clSetKernelArg(s_kernel, 6, sizeof(cl_mem), (void*)&scoreBuffer);
+    ret = clSetKernelArg(s_kernel, 7, sizeof(cl_mem), (void*)&colorBuffer);
+    ret = clSetKernelArg(s_kernel, 8, sizeof(int), (void*)&width);
+    ret = clSetKernelArg(s_kernel, 9, sizeof(int), (void*)&height);
+
     LARGE_INTEGER frequency;        // ticks per second
     LARGE_INTEGER t1, t2;           // ticks
     double elapsedTime;
@@ -206,19 +262,29 @@ double invokeMseKernel(DMatrix* current, DMatrix* target) {
     QueryPerformanceCounter(&t2);
     // compute and print the elapsed time in millisec
     elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("256 done in %f ms.\n", elapsedTime);
+    printf("Eval done in %f ms.\n", elapsedTime);
 
 
     int result;
-    ret = clEnqueueReadBuffer(s_queue, mseSumBuffer, CL_TRUE, 0, sizeof(int), &result, 0, NULL, NULL);
+    int color[3];
+    ret = clEnqueueReadBuffer(s_queue, scoreBuffer, CL_TRUE, 0, sizeof(int), &result, 0, NULL, NULL);
+    ret = clEnqueueReadBuffer(s_queue, colorBuffer, CL_TRUE, 0, sizeof(int) * 3, &color, 0, NULL, NULL);
     printf("%i\n", result);
-    double finalResult = (double)result * 10.0;
+    float finalResult = result;
 
     clReleaseMemObject(currentMatrixBuffer);
     clReleaseMemObject(targetMatrixBuffer);
-    clReleaseMemObject(mseSumBuffer);
+    clReleaseMemObject(scoreBuffer);
+    clReleaseMemObject(colorBuffer);
 
-    return finalResult / (double)(width * height);
+    int icolor = 0xFF000000;
+    icolor += color[0] * 0x00010000;
+    icolor += color[1] * 0x00000100;
+    icolor += color[2] * 0x00000001;
+
+    rect->color = icolor;
+
+    return (double)(finalResult / (width * height));
 }
 
 void clearAllTheOpenCLStuff() {
