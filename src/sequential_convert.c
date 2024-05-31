@@ -194,8 +194,6 @@ double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
         }
     }
 
-    printf("test %f\n", test);
-
     double mse = sum_sq / (double)(a->cols * a->rows);
     return mse;
 }

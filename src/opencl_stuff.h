@@ -5,7 +5,8 @@
 void loadAllTheOpenCLStuff();
 void clearAllTheOpenCLStuff();
 double invokeMseKernel(DMatrix* current, DMatrix* target);
-Rect* invokeKernel(DMatrix* current, DMatrix* target, int startFromLittle);
+Rect* invokeSingleRectKernel(DMatrix* current, DMatrix* target, int startFromLittle);
+Rect** invoke256xRectKernel(DMatrix* current, DMatrix* target);
 double invokeEvalKernel(Rect* rect, DMatrix* current, DMatrix* target);
 void uploadCurrent(DMatrix* current);
 void uploadTarget(DMatrix* target);

@@ -6,8 +6,6 @@ cl_context s_context = NULL;
 cl_program s_program = NULL;
 cl_kernel s_kernel = NULL;
 cl_command_queue s_queue = NULL;
-cl_mem currentMatrixBuffer = NULL;
-cl_mem targetMatrixBuffer = NULL;
 
 
 char* readKernelSource(const char* filename) {
@@ -86,7 +84,7 @@ void loadAllTheOpenCLStuff() {
     s_device = createDevice();
     s_context = createContext(&s_device);
     s_program = buildProgram(s_context, s_device);
-    s_kernel = clCreateKernel(s_program, "calculate_next_rect", &err);
+    s_kernel = clCreateKernel(s_program, "calculate_next_256_rects", &err);
     s_queue = clCreateCommandQueue(s_context, s_device, 0, &err);
 
     if (err) {
@@ -94,7 +92,7 @@ void loadAllTheOpenCLStuff() {
     }
 }
 
-Rect* invokeKernel(DMatrix* current, DMatrix* target, int startFromLittle) {
+Rect* invokeSingleRectKernel(DMatrix* current, DMatrix* target, int startFromLittle) {
     int ret = 0;
     int width = current->cols;
     int height = current->rows;
@@ -132,7 +130,7 @@ Rect* invokeKernel(DMatrix* current, DMatrix* target, int startFromLittle) {
     QueryPerformanceCounter(&t2);
     // compute and print the elapsed time in millisec
     elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("Rect done in %f ms.\n", elapsedTime);
+    printf("Rect kernel done in %f ms.\n", elapsedTime);
 
     ret = clEnqueueReadBuffer(s_queue, rectArray, CL_TRUE, 0, sizeof(int) * 8 * 8, result, 0, NULL, NULL);
     printf("%i\n", result[0]);
@@ -155,32 +153,66 @@ Rect* invokeKernel(DMatrix* current, DMatrix* target, int startFromLittle) {
     return finalResult;
 }
 
-void uploadCurrent(DMatrix* current) {
+Rect** invoke256xRectKernel(DMatrix* current, DMatrix* target) {
     int ret = 0;
-    cl_event writeEvent = NULL;
-    if (currentMatrixBuffer == NULL) {
-        currentMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_WRITE, current->cols * current->rows * sizeof(int), current->data, &ret);
+    int width = current->cols;
+    int height = current->rows;
+    int* result = malloc(sizeof(int) * 8 * 256);
+    for (int i = 0; i < 2048; i++) {
+        result[i] = 0;
     }
-    else {
-        ret = clEnqueueWriteBuffer(s_queue, currentMatrixBuffer, CL_TRUE, 0, sizeof(int) * current->rows * current->cols, current->data, 0, NULL, &writeEvent);
-        clWaitForEvents(1, &writeEvent);
-        if (ret != CL_SUCCESS) {
-            printf("%x", ret);
-            exit(1);
-        }
-    }
-    
-}
 
-void uploadTarget(DMatrix* target) {
-    int ret = 0;
-    if (targetMatrixBuffer == NULL) {
-        targetMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, target->cols * target->rows * sizeof(int), target->data, &ret);
+    int* test = malloc(sizeof(int) * 8 * 256);
+    for (int i = 0; i < 8 * 256; i++) {
+        test[i] = 0;
     }
-    else {
-        ret = clEnqueueWriteBuffer(s_queue, targetMatrixBuffer, CL_TRUE, 0, sizeof(int) * target->rows * target->cols, target->data, 0, NULL, NULL);
-        clFinish(s_queue);
+
+    cl_mem currentMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, current->cols * current->rows * sizeof(int), current->data, &ret);
+    cl_mem targetMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, target->cols * target->rows * sizeof(int), target->data, &ret);
+    cl_mem intermediate = clCreateBuffer(s_context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(int) * 8 * 8, result, &ret);
+    cl_mem rectArray = clCreateBuffer(s_context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(int) * 8 * 256, test, &ret);
+
+    int randomSeed = rand();
+
+    ret = clSetKernelArg(s_kernel, 0, sizeof(cl_mem), (void*)&currentMatrixBuffer);
+    ret = clSetKernelArg(s_kernel, 1, sizeof(cl_mem), (void*)&targetMatrixBuffer);
+    ret = clSetKernelArg(s_kernel, 2, sizeof(cl_mem), (void*)&intermediate);
+    ret = clSetKernelArg(s_kernel, 3, sizeof(cl_mem), (void*)&rectArray);
+    ret = clSetKernelArg(s_kernel, 4, sizeof(int), (void*)&width);
+    ret = clSetKernelArg(s_kernel, 5, sizeof(int), (void*)&height);
+    ret = clSetKernelArg(s_kernel, 6, sizeof(int), (void*)&randomSeed);
+
+
+    size_t globalItemSize[] = {16, 16};
+    ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
+    clFinish(s_queue);
+
+    ret = clEnqueueReadBuffer(s_queue, rectArray, CL_TRUE, 0, sizeof(int) * 8 * 256, result, 0, NULL, NULL);
+    printf("%i\n", result[2]);
+
+    clReleaseMemObject(rectArray);
+
+    Rect** finalResult = malloc(sizeof(Rect*) * 256);
+    
+
+    for (int i = 0; i < 256; i++) {
+        int offset = i * 8;
+
+        int resultColor = 0xFF000000;
+        resultColor += 0x00010000 * result[offset + 4];
+        resultColor += 0x00000100 * result[offset + 5];
+        resultColor += 0x00000001 * result[offset + 6];
+
+        finalResult[i] = allocRect(
+            result[offset],
+            result[offset + 1],
+            result[offset + 2],
+            result[offset + 3],
+            resultColor
+        );
     }
+
+    return finalResult;
 }
 
 double invokeMseKernel(DMatrix* current, DMatrix* target) {
@@ -255,7 +287,7 @@ double invokeEvalKernel(Rect* rect, DMatrix* current, DMatrix* target) {
     QueryPerformanceCounter(&t1);
 
 
-    size_t globalItemSize[] = {256, 256};
+    size_t globalItemSize[] = {32, 32};
     ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
     clFinish(s_queue);
 
@@ -288,14 +320,6 @@ double invokeEvalKernel(Rect* rect, DMatrix* current, DMatrix* target) {
 }
 
 void clearAllTheOpenCLStuff() {
-    if (currentMatrixBuffer != NULL) {
-        clReleaseMemObject(currentMatrixBuffer);
-        currentMatrixBuffer = NULL;
-    }
-    if (targetMatrixBuffer != NULL) {
-        clReleaseMemObject(targetMatrixBuffer);
-        currentMatrixBuffer = NULL;
-    }
     clReleaseKernel(s_kernel);
     clReleaseCommandQueue(s_queue);
     clReleaseProgram(s_program);
