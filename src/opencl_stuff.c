@@ -191,9 +191,12 @@ Rect** invoke256xRectKernel(DMatrix* current, DMatrix* target) {
     printf("%i\n", result[2]);
 
     clReleaseMemObject(rectArray);
+    clReleaseMemObject(targetMatrixBuffer);
+    clReleaseMemObject(currentMatrixBuffer);
+    clReleaseMemObject(intermediate);
 
     Rect** finalResult = malloc(sizeof(Rect*) * 256);
-    
+    free(test);
 
     for (int i = 0; i < 256; i++) {
         int offset = i * 8;
@@ -211,6 +214,8 @@ Rect** invoke256xRectKernel(DMatrix* current, DMatrix* target) {
             resultColor
         );
     }
+
+    free(result);
 
     return finalResult;
 }

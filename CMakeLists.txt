@@ -6,6 +6,8 @@ find_package(OpenCL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(PNG REQUIRED)
+find_package(FFMPEG REQUIRED)
+
 
 add_executable(${PROJECT_NAME}
     src/image_presentation.c
@@ -14,11 +16,14 @@ add_executable(${PROJECT_NAME}
     src/utils.c
     src/sequential_convert.c
     src/opencl_stuff.c
+    src/video_import
 )
 
 include_directories(include)
 include_directories(${SDL2_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(${PROJECT_NAME} PRIVATE ${FFMPEG_INCLUDE_DIRS})
+target_link_directories(${PROJECT_NAME} PRIVATE ${FFMPEG_LIBRARY_DIRS})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
@@ -26,6 +31,7 @@ target_link_libraries(${PROJECT_NAME}
         SDL2_image::SDL2_image
         OpenCL::OpenCL
         PNG::PNG
+        ${FFMPEG_LIBRARIES}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES C_STANDARD 11

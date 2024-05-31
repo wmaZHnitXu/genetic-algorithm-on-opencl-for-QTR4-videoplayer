@@ -1,6 +1,9 @@
 #include <image_presentation.h>
 #include <math.h>
 
+SDL_Window* currentWindow = NULL;
+SDL_Renderer* currentRenderer = NULL; 
+
 SDL_Surface *createSurfaceFromTexture(SDL_Renderer *renderer, SDL_Texture *texture, int width, int height) {
     SDL_Surface *surface = NULL;
     SDL_Texture *target = NULL;
@@ -140,71 +143,77 @@ void displayImage(const char* imagePath) {
 }
 
 void displayMatrix(DMatrix* matrix) {
-    // Initialize SDL2
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+
+    if (currentWindow == NULL) {
+        // Initialize SDL2
+        if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+            fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
+            return;
+        }
+
+        // Create window
+        window = SDL_CreateWindow("Matrix Display",
+                                  SDL_WINDOWPOS_CENTERED,
+                                  SDL_WINDOWPOS_CENTERED,
+                                  matrix->cols * 2,
+                                  matrix->rows * 2,
+                                  0);
+        if (!window) {
+            fprintf(stderr, "Failed to create window: %s\n", SDL_GetError());
+            SDL_Quit();
+            return;
+        }
+        currentWindow = window;
+
+        // Create renderer
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (!renderer) {
+            fprintf(stderr, "SDL_CreateRenderer failed: %s\n", SDL_GetError());
+            SDL_DestroyWindow(window);
+            SDL_Quit();
+            return;
+        }
+        currentRenderer = renderer;
+    } else {
+        window = currentWindow;
+        renderer = currentRenderer;
+    }
+
+    // Create an SDL surface for the matrix
+    int w = matrix->cols;
+    int h = matrix->rows;
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, w, h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+    if (!surface) {
+        fprintf(stderr, "SDL_CreateRGBSurface failed: %s\n", SDL_GetError());
         return;
     }
 
-   // Initialize PNG loading with SDL_image library
-   int imgFlags = IMG_INIT_PNG;
-   if (!(IMG_Init(imgFlags) & imgFlags)) {
-       fprintf(stderr, "Could not initialize SDL_image: %s\n", IMG_GetError());
-       return;
-   }
-
-   // Create window
-   SDL_Window *window = SDL_CreateWindow("Matrix Display",
-                                         SDL_WINDOWPOS_CENTERED,
-                                         SDL_WINDOWPOS_CENTERED,
-                                         matrix->cols * 2,
-                                         matrix->rows * 2,
-                                         0);
-
-   if (!window) {
-       fprintf(stderr, "Failed to create window: %s\n", SDL_GetError());
-       return;
-   }
-
-   // Create renderer
-   SDL_Renderer *renderer = SDL_CreateRenderer(window,-1 , SDL_RENDERER_ACCELERATED);
-
-    if (!renderer){
-        SDL_DestroyWindow(window);
-        fprintf(stderr, "Sdl_createRender failed ;% s \n", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-
-
-    SDL_Texture *texture = NULL;
-    int w = matrix->cols;
-    int h = matrix->rows;
-    SDL_Surface *surface = SDL_CreateRGBSurface(0,w,h,32,0,0,0,0);
-
-
     Uint32 *pixels = (Uint32 *)surface->pixels;
-
-    for(int y = 0; y < surface->h; y++) {
-        for(int x = 0; x < surface->w; x++) {
-            Uint32 color = matrix->data[y * w + x];
-            int index = (y * surface->w) + x;
-            pixels[index] = color;
+    for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+            Uint32 color = (Uint32)getDMatrixElem(matrix, y, x);
+            pixels[y * w + x] = color;
         }
     }
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+        fprintf(stderr, "SDL_CreateTextureFromSurface failed: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface);
+        return;
+    }
+
+    SDL_FreeSurface(surface);
 
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer , texture, NULL, NULL);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(15000); //Wait before closing
-
     SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
-
-
-    return;
 }
+
 
 DMatrix* createMatrixFromPng(char* path) {
     FILE *fp = fopen(path, "rb");
