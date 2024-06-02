@@ -96,24 +96,28 @@ Rect* invokeSingleRectKernel(DMatrix* current, DMatrix* target, int startFromLit
     int ret = 0;
     int width = current->cols;
     int height = current->rows;
-    int* result = malloc(sizeof(int) * 8 * 8);
+    int* result = malloc(sizeof(int) * 8 * 8 + 1);
+    int* rands = malloc(sizeof(int) * 8 * 8);
     for (int i = 0; i < 64; i++) {
         result[i] = 0;
+        rands[i] = rand();
     }
 
     cl_mem currentMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, current->cols * current->rows * sizeof(int), current->data, &ret);
     cl_mem targetMatrixBuffer = clCreateBuffer(s_context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, target->cols * target->rows * sizeof(int), target->data, &ret);
-    cl_mem rectArray = clCreateBuffer(s_context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(int) * 8 * 8, result, &ret);
+    cl_mem rectArray = clCreateBuffer(s_context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(int) * 8 * 8 + 1, result, &ret);
+    cl_mem randomsArray = clCreateBuffer(s_context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, sizeof(int) * 8 * 8, rands, &ret);
 
     int randomSeed = rand();
 
     ret = clSetKernelArg(s_kernel, 0, sizeof(cl_mem), (void*)&currentMatrixBuffer);
     ret = clSetKernelArg(s_kernel, 1, sizeof(cl_mem), (void*)&targetMatrixBuffer);
     ret = clSetKernelArg(s_kernel, 2, sizeof(cl_mem), (void*)&rectArray);
-    ret = clSetKernelArg(s_kernel, 3, sizeof(int), (void*)&width);
-    ret = clSetKernelArg(s_kernel, 4, sizeof(int), (void*)&height);
-    ret = clSetKernelArg(s_kernel, 5, sizeof(int), (void*)&randomSeed);
-    ret = clSetKernelArg(s_kernel, 6, sizeof(int), (void*)&startFromLittle);
+    ret = clSetKernelArg(s_kernel, 3, sizeof(cl_mem), (void*)&randomsArray);
+    ret = clSetKernelArg(s_kernel, 4, sizeof(int), (void*)&width);
+    ret = clSetKernelArg(s_kernel, 5, sizeof(int), (void*)&height);
+    ret = clSetKernelArg(s_kernel, 6, sizeof(int), (void*)&randomSeed);
+    ret = clSetKernelArg(s_kernel, 7, sizeof(int), (void*)&startFromLittle);
 
     LARGE_INTEGER frequency;        // ticks per second
     LARGE_INTEGER t1, t2;           // ticks
@@ -123,31 +127,32 @@ Rect* invokeSingleRectKernel(DMatrix* current, DMatrix* target, int startFromLit
     QueryPerformanceCounter(&t1);
 
 
-    size_t globalItemSize[] = {32, 32};
+    size_t globalItemSize[] = {256, 256};
     ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
     clFinish(s_queue);
-
+    
     QueryPerformanceCounter(&t2);
     // compute and print the elapsed time in millisec
     elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
     printf("Rect kernel done in %f ms.\n", elapsedTime);
 
     ret = clEnqueueReadBuffer(s_queue, rectArray, CL_TRUE, 0, sizeof(int) * 8 * 8, result, 0, NULL, NULL);
-    printf("%i\n", result[0]);
+    //printf("%i\n", result[0]);
 
     clReleaseMemObject(rectArray);
+    clReleaseMemObject(randomsArray);
 
     int resultColor = 0xFF000000;
-    resultColor += 0x00010000 * result[4 + 8];
-    resultColor += 0x00000100 * result[5 + 8];
-    resultColor += 0x00000001 * result[6 + 8];
+    resultColor += 0x00010000 * result[4];
+    resultColor += 0x00000100 * result[5];
+    resultColor += 0x00000001 * result[6];
 
     for (int i = 0; i < 8; i++) {
-        printf("result %i\n", result[i + 8]);
+        //printf("result %i\n", result[i + 8]);
     }
 
-    Rect* finalResult = allocRect(result[0 + 8], result[1 + 8], result[2 + 8], result[3 + 8], resultColor);
-    finalResult->score = (double)result[7 + 8] * 10.0;
+    Rect* finalResult = allocRect(result[0], result[1], result[2], result[3], resultColor);
+    finalResult->score = *((float*)&result[7]);
     free(result);
 
     return finalResult;
@@ -183,9 +188,22 @@ Rect** invoke256xRectKernel(DMatrix* current, DMatrix* target) {
     ret = clSetKernelArg(s_kernel, 6, sizeof(int), (void*)&randomSeed);
 
 
-    size_t globalItemSize[] = {16, 16};
+    size_t globalItemSize[] = {1, 256};
+
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER t1, t2;           // ticks
+    double elapsedTime;
+    // get ticks per second
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&t1);
+
     ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
     clFinish(s_queue);
+
+    QueryPerformanceCounter(&t2);
+    // compute and print the elapsed time in millisec
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("Kernel done in %f ms.\n", elapsedTime);
 
     ret = clEnqueueReadBuffer(s_queue, rectArray, CL_TRUE, 0, sizeof(int) * 8 * 256, result, 0, NULL, NULL);
     printf("%i\n", result[2]);
@@ -299,14 +317,13 @@ double invokeEvalKernel(Rect* rect, DMatrix* current, DMatrix* target) {
     QueryPerformanceCounter(&t2);
     // compute and print the elapsed time in millisec
     elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("Eval done in %f ms.\n", elapsedTime);
+    //printf("Eval done in %f ms.\n", elapsedTime);
 
 
     int result;
     int color[3];
     ret = clEnqueueReadBuffer(s_queue, scoreBuffer, CL_TRUE, 0, sizeof(int), &result, 0, NULL, NULL);
     ret = clEnqueueReadBuffer(s_queue, colorBuffer, CL_TRUE, 0, sizeof(int) * 3, &color, 0, NULL, NULL);
-    printf("%i\n", result);
     float finalResult = result;
 
     clReleaseMemObject(currentMatrixBuffer);

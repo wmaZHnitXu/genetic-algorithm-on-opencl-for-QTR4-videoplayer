@@ -2,7 +2,8 @@
 #include <math.h>
 
 SDL_Window* currentWindow = NULL;
-SDL_Renderer* currentRenderer = NULL; 
+SDL_Renderer* currentRenderer = NULL;
+SDL_Surface* currentSurface = NULL; 
 
 SDL_Surface *createSurfaceFromTexture(SDL_Renderer *renderer, SDL_Texture *texture, int width, int height) {
     SDL_Surface *surface = NULL;
@@ -142,6 +143,18 @@ void displayImage(const char* imagePath) {
 
 }
 
+void cleanupDisplay() {
+    if (currentRenderer) {
+        SDL_DestroyRenderer(currentRenderer);
+        currentRenderer = NULL;
+    }
+    if (currentWindow) {
+        SDL_DestroyWindow(currentWindow);
+        currentWindow = NULL;
+    }
+    SDL_Quit();
+}
+
 void displayMatrix(DMatrix* matrix) {
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -212,6 +225,15 @@ void displayMatrix(DMatrix* matrix) {
     SDL_RenderPresent(renderer);
 
     SDL_DestroyTexture(texture);
+
+    // Process SDL events to keep the window responsive
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            cleanupDisplay();
+            exit(0);
+        }
+    }
 }
 
 

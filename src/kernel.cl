@@ -32,13 +32,12 @@ __kernel void mse_sum_between_two_matrices(__global int* A, __global int* B, __g
     }
 }
 
-int rand(int* seed) // 1 <= *seed < m
-{
-    int const a = 16807; //ie 7**5
-    int const m = 2147483647; //ie 2**31-1
-
-    *seed = (*seed * a) % m;
-    return abs(*seed);
+uint rand(uint* seed) {
+    uint hi = *seed / 127773;
+    uint lo = *seed % 127773;
+    uint x = 16807 * lo - 2836 * hi;
+    if (x < 0) x += 0x7fffffff;
+    return *seed = x;
 }
 
 float eval_rect(int x, int y, int w, int h, int* pcolor, __global int* current, __global int* target, int width) {
@@ -100,14 +99,14 @@ float eval_rect(int x, int y, int w, int h, int* pcolor, __global int* current, 
                 prev_diff[k] = current_channels[k] - target_channels[k];
                 new_diff[k] = avg_channels[k] - target_channels[k];
                 
-                prev_diff[k] *= prev_diff[k];
-                new_diff[k] *= new_diff[k];
+                prev_diff[k] = prev_diff[k] * prev_diff[k];
+                new_diff[k] = new_diff[k] * new_diff[k];
             }
 
             float prev_err = (float)(prev_diff[0] + prev_diff[1] + prev_diff[2] + prev_diff[3]);
             float new_err = (float)(new_diff[0] + new_diff[1] + new_diff[2] + new_diff[3]);
-            prev_sum += prev_err;
-            new_sum += new_err;
+            prev_sum += prev_err * 0.1f;
+            new_sum += new_err * 0.1f;
         }
     }
 
@@ -126,13 +125,13 @@ __kernel void evaluate_rect(int x, int y, int w, int h, __global int* current_ma
     atomic_xchg(result, res);
 }
 
-__kernel void calculate_next_rect(__global int* current_matrix, __global int* target_matrix, __global int* result,
+__kernel void calculate_next_rect(__global int* current_matrix, __global int* target_matrix, __global int* result, __global int* rands,
  int width, int height, int random_seed, int num) {
-
+    
     int x = get_global_id(0);
     int y = get_global_id(1);
 
-    int seed = random_seed + y * width + x;
+    int seed = rands[(random_seed + y * width + x) % 64] + y * width + x;
 
     int rect[8];
     if (num <= 0) {
@@ -155,23 +154,22 @@ __kernel void calculate_next_rect(__global int* current_matrix, __global int* ta
     float avg[4];
 
     float score = eval_rect(rect[0], rect[1], rect[2], rect[3], &(rect[4]), current_matrix, target_matrix, width);
-    int iscore = (int)score;
+    int iscore = (int)(score * 1.0f);
     rect[7] = iscore;
 
     for (int i = 0; i < 8; i++) {
         int offset = i * 8;
-        int old_score = atomic_max(&result[offset + 7], iscore);
-        
-        if (iscore > old_score) {
+        int old = atomic_max(&result[offset + 7], iscore);
+        if (old < iscore) {
+            iscore = 0;
             for (int j = 0; j < 7; j++) {
                 atomic_xchg(&result[offset + j], rect[j]);
+                
             }
-            break;
         }
     }
 
-    barrier(CLK_LOCAL_MEM_FENCE);
-    int mutation_steps = 3;
+    int mutation_steps = 25;
     for (int i = 0; i < mutation_steps; i++) {
         int mut_rect_id = get_global_id(0) % 8;
         int offset = mut_rect_id * 8;
@@ -190,22 +188,22 @@ __kernel void calculate_next_rect(__global int* current_matrix, __global int* ta
         }
 
         score = eval_rect(rect[0], rect[1], rect[2], rect[3], &(rect[4]), current_matrix, target_matrix, width);
-        iscore = (int)score;
+        iscore = (int)(score * 1.0f);
         rect[7] = iscore;
 
         for (int i = 0; i < 8; i++) {
             int offset = i * 8;
-            int old_score = atomic_max(&result[offset + 7], iscore);
-            
-            if (iscore > old_score) {
+            barrier(CLK_GLOBAL_MEM_FENCE);
+            int old = atomic_max(&result[offset + 7], iscore);
+            if (old < iscore) {
+                iscore = 0;
                 for (int j = 0; j < 7; j++) {
                     atomic_xchg(&result[offset + j], rect[j]);
+                    
                 }
-                break;
             }
         }
 
-        barrier(CLK_LOCAL_MEM_FENCE);
     }
 }
 
@@ -216,7 +214,7 @@ __kernel void calculate_next_256_rects(__global int* current_matrix, __global in
     int y = get_global_id(1);
     int gid = get_global_id(0) + get_global_id(1) * get_global_size(0);
 
-    int num = 100;
+    int num = 1;
     int seed = random_seed + y * width + x;
 
     // Сохранение локального лучшего прямоугольника
@@ -249,13 +247,13 @@ __kernel void calculate_next_256_rects(__global int* current_matrix, __global in
 
         for (int i = 0; i < 8; i++) {
             int offset = i * 8;
-            int old_score = atomic_max(&result[offset + 7], iscore);
-
-            if (iscore > old_score) {
+            int old = atomic_max(&result[offset + 7], iscore);
+            if (old < iscore) {
+                iscore = 0;
                 for (int j = 0; j < 7; j++) {
                     atomic_xchg(&result[offset + j], rect[j]);
+                    
                 }
-                break;
             }
         }
 
@@ -285,18 +283,18 @@ __kernel void calculate_next_256_rects(__global int* current_matrix, __global in
             }
 
             score = eval_rect(rect[0], rect[1], rect[2], rect[3], &(rect[4]), current_matrix, target_matrix, width);
-            iscore = (int)score;
+            iscore = (int)(score);
             rect[7] = iscore;
 
             for (int i = 0; i < 8; i++) {
                 int offset = i * 8;
-                int old_score = atomic_max(&result[offset + 7], iscore);
-
-                if (iscore > old_score) {
+                int old = atomic_max(&result[offset + 7], iscore);
+                if (old < iscore) {
+                    iscore = 0;
                     for (int j = 0; j < 7; j++) {
                         atomic_xchg(&result[offset + j], rect[j]);
+                        
                     }
-                    break;
                 }
             }
 

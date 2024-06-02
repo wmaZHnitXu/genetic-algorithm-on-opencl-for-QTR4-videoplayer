@@ -1,6 +1,7 @@
 #include <sequential_convert.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <opencl_stuff.h>
 
 double mseMemMatrix[1024 * 1024];
 
@@ -187,9 +188,9 @@ double mseBetweenDMatrixes(DMatrix* a, DMatrix* b) {
                 diff[k] = aColors[k] - bColors[k];
                 diff[k] = diff[k] * diff[k];
             }
-            double err = sqrt((float)(diff[0] + diff[1] + diff[2] + diff[3]));
-            mseMemMatrix[i * width + j] = err * err;
-            sum_sq += err * err;
+            double err = (double)(diff[0] + diff[1] + diff[2] + diff[3]);
+            mseMemMatrix[i * width + j] = err;
+            sum_sq += err;
             test += diff[3];
         }
     }
@@ -225,9 +226,9 @@ double optimisedEvalRectOnMatrix(Rect *rect, DMatrix *current, DMatrix *target) 
                 diff[k] = color[k] - targetColor[k];
                 diff[k] = diff[k] * diff[k];
             }
-            float err = sqrt(diff[0] + diff[1] + diff[2] + diff[3]);
+            float err = diff[0] + diff[1] + diff[2] + diff[3];
 
-            newSum += err * err;
+            newSum += err;
             oldSum += mseMemMatrix[i * width + j];
         }
     }
@@ -283,6 +284,24 @@ int getAvgColor(Rect *rect, DMatrix *target) {
     result += g * 0x00000100;
     result += b * 0x00000001;
     return result;
+}
+
+Rect* getNextSequentialRect(DMatrix* currentMatrix, DMatrix* targetMatrix) {
+    int mutationsteps = 10;
+    int childrencount = 256;
+    Node* population = getPopulation(currentMatrix, targetMatrix, 1000, 10, 0.0, 10000);
+    for (int j = 0; j < mutationsteps; j++) {
+        Node* madeittosex = createSublist(population, 7);
+        freeList(population);
+
+        population = getMutation(madeittosex, currentMatrix, targetMatrix, childrencount, 10, 0.0);
+        freeList(madeittosex);
+    }
+
+    Rect* rectToApply = allocCopyOfRect(population->rect);
+    freeList(population);
+
+    return rectToApply;
 }
 
 int rand255() {
