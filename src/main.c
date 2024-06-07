@@ -24,6 +24,10 @@ int main()
     
     printf_s("sex???");
     DMatrix* targetMatrix = createMatrixFromPng("test.png");
+    
+    DMatrix* g = createMatrixFromPng("g.png");
+    double mse = mseBetweenDMatrixes(g, targetMatrix);
+    printf("G MSE:%f", mse);
     //targetMatrix = allocDMatrix(256, 256);
     //drawRectOnDMatrix(allocRect(10, 10, 100, 100, 0xFF778822), targetMatrix);
     DMatrix* currentMatrix = allocDMatrix(targetMatrix->cols, targetMatrix->rows);
@@ -32,7 +36,7 @@ int main()
     int mutationsteps = 10;
     int childrencount = 26;
 
-    double mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
+    mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
 
     printf_s("sex???\n");
     FFmpegState state;
@@ -54,10 +58,18 @@ int main()
 
     DMatrix* targetMatrixFrame;
 
-    for (int i = 0; (targetMatrixFrame = readNextFrame(&state)) != NULL; i += 256) {
-        //if (i > rectcount) break;
+    int i = 0;
+    for (; (targetMatrixFrame = readNextFrame(&state)) != NULL; i += 256) {
 
-        for (int k = 0; k < 1; k++) {
+        if (currentMatrix->cols != targetMatrixFrame->cols || currentMatrix->rows != targetMatrixFrame->rows) {
+            currentMatrix = allocDMatrix(targetMatrixFrame->cols, targetMatrixFrame->rows);
+        }
+        //if (i > rectcount) {
+          //  i -= 256;
+          //  break;
+        //}
+
+        for (int k = 0; k < 4; k++) {
         Rect** rectsToApply = invoke256xRectKernel(currentMatrix, targetMatrixFrame);
         printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, 0.0, rectsToApply[255]->color);
         for (int j = 0; j < 256; j++) {
@@ -71,9 +83,6 @@ int main()
         }
 
         freeDMatrix(targetMatrixFrame);
-
-        
-        
         
     }
 
@@ -81,7 +90,7 @@ int main()
     QueryPerformanceCounter(&t2);
     // compute and print the elapsed time in millisec
     elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("%i rects done in %f ms.\n", rectcount, elapsedTime);
+    printf("%i rects done in %f ms.\n", i, elapsedTime);
 
     //*/
 
@@ -134,20 +143,24 @@ int main()
     for (int i = 0; i < rectcount; i++) {
 
         
-        Rect* sequentialRect = getNextSequentialRect(currentMatrix, targetMatrix);
-        Rect* kernelRect = invokeSingleRectKernel(currentMatrix, targetMatrix, 0);
-        float kmse = optimisedEvalRectOnMatrix(kernelRect, currentMatrix, targetMatrix);
-        drawRectOnDMatrix(kernelRect, currentMatrix);
+        Rect* sequentialRect = getNextSequentialRect(currentMatrix, targetMatrix, i);
+        //Rect* kernelRect = invokeSingleRectKernel(currentMatrix, targetMatrix, 0);
+        float kmse = 0.0f;//optimisedEvalRectOnMatrix(kernelRect, currentMatrix, targetMatrix);
+        drawRectOnDMatrix(sequentialRect, currentMatrix);
         mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
-        printf_s("Rect#%i  sMSE:%f kMSE:%f kSCR:%f MSE:%f\n", i+1, sequentialRect->score, kmse, kernelRect->score, mse);
+        printf_s("Rect#%i  sMSE:%f kMSE:%f kSCR:%f MSE:%f\n", i+1, sequentialRect->score, kmse, 0.0, mse);
         displayMatrix(currentMatrix);
         free(sequentialRect);
-        free(kernelRect);
+        //free(kernelRect);
     }
     
     */
     
     //drawRectOnDMatrix(allocRect(128, 128, 128, 128, 0xFFFF00FF), currentMatrix);
+
+    for (int i = 0; i < 1000000; i++) {
+        displayMatrix(currentMatrix);
+    }
 
     freeDMatrix(currentMatrix); 
     clearAllTheOpenCLStuff();   

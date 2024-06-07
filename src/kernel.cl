@@ -217,27 +217,25 @@ __kernel void calculate_next_256_rects(__global int* current_matrix, __global in
     int num = 1;
     int seed = random_seed + y * width + x;
 
-    // Сохранение локального лучшего прямоугольника
-    __local int local_best_rect[8 * 8];  // Каждый поток сохраняет свои лучшие 8 прямоугольников
 
     for (int l = 0; l < 256; l++) {
 
         int rect[8];
         if (num <= 0) {
-            rect[0] = rand(&seed) % 256; // x
-            rect[1] = rand(&seed) % 256; // y
-            rect[2] = 256 - rect[0] + 1; // w constraint
-            rect[3] = 256 - rect[1] + 1; // h constraint
+            rect[0] = rand(&seed) % width; // x
+            rect[1] = rand(&seed) % height; // y
+            rect[2] = width - rect[0] + 1; // w constraint
+            rect[3] = height - rect[1] + 1; // h constraint
             rect[2] = rand(&seed) % rect[2]; // w
             rect[3] = rand(&seed) % rect[3]; // h
         }
         else {
-            rect[0] = rand(&seed) % 256; // x
-            rect[1] = rand(&seed) % 256; // y
+            rect[0] = rand(&seed) % width; // x
+            rect[1] = rand(&seed) % height; // y
             rect[2] = 1 + rand(&seed) % 8;
             rect[3] = 1 + rand(&seed) % 8;
-            rect[2] = rect[2] + rect[0] <= 256 ? rect[2] : 256 - rect[0];
-            rect[3] = rect[3] + rect[1] <= 256 ? rect[3] : 256 - rect[1];
+            rect[2] = rect[2] + rect[0] <= width ? rect[2] : width - rect[0];
+            rect[3] = rect[3] + rect[1] <= height ? rect[3] : height - rect[1];
         }
 
         float avg[4];
@@ -257,35 +255,35 @@ __kernel void calculate_next_256_rects(__global int* current_matrix, __global in
             }
         }
 
-        // Сохранение локального лучшего прямоугольника
-        for (int i = 0; i < 8; i++) {
-            local_best_rect[gid * 8 + i] = result[i];
-        }
-
         barrier(CLK_LOCAL_MEM_FENCE);
         
-        int mutation_steps = 10;
+        int mutation_steps = 5;
         for (int i = 0; i < mutation_steps; i++) {
             int mut_rect_id = get_global_id(0) % 8;
             int offset = mut_rect_id * 8;
 
             // mutation
-            for (int j = 0; j < 2; j++) {
-                rect[j] = result[offset + j] + rand(&seed) % 8 - 4;
-                rect[j] = rect[j] >= 0 ? rect[j] : 0;
-                rect[j] = rect[j] < 256 ? rect[j] : 255;
-            }
+            rect[0] = result[offset + 0] + rand(&seed) % 8 - 4;
+            rect[0] = rect[0] >= 0 ? rect[0] : 0;
+            rect[0] = rect[0] < width ? rect[0] : width - 1;
 
-            for (int j = 2; j < 4; j++) {
-                rect[j] = result[offset + j] + rand(&seed) % 8 - 4;
-                rect[j] = rect[j] > 0 ? rect[j] : 1;
-                rect[j] = rect[j] + rect[j - 2] <= 256 ? rect[j] : 256 - rect[j - 2];
-            }
+            rect[1] = result[offset + 1] + rand(&seed) % 8 - 4;
+            rect[1] = rect[1] >= 0 ? rect[1] : 0;
+            rect[1] = rect[1] < height ? rect[1] : height - 1;
+
+            rect[2] = result[offset + 2] + rand(&seed) % 8 - 4;
+            rect[2] = rect[2] > 0 ? rect[2] : 1;
+            rect[2] = rect[2] + rect[0] <= width ? rect[2] : width - rect[0];
+
+            rect[3] = result[offset + 3] + rand(&seed) % 8 - 4;
+            rect[3] = rect[3] > 0 ? rect[3] : 1;
+            rect[3] = rect[3] + rect[1] <= height ? rect[3] : height - rect[1];
 
             score = eval_rect(rect[0], rect[1], rect[2], rect[3], &(rect[4]), current_matrix, target_matrix, width);
             iscore = (int)(score);
             rect[7] = iscore;
 
+            
             for (int i = 0; i < 8; i++) {
                 int offset = i * 8;
                 int old = atomic_max(&result[offset + 7], iscore);
