@@ -288,9 +288,9 @@ int getAvgColor(Rect *rect, DMatrix *target) {
 
 Rect* getNextSequentialRect(DMatrix* currentMatrix, DMatrix* targetMatrix, int num) {
     num = 10000;
-    int mutationsteps = 10;
-    int childrencount = 30;
-    Node* population = getPopulation(currentMatrix, targetMatrix, 300, 10, 0.0, num);
+    int mutationsteps = 1;
+    int childrencount = 10;
+    Node* population = getPopulation(currentMatrix, targetMatrix, 100, 10, 0.0, num);
     for (int j = 0; j < mutationsteps; j++) {
         Node* madeittosex = createSublist(population, 10);
         freeList(population);

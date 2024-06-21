@@ -16,7 +16,13 @@
     <ClCompile Include="D:\OpenclGenetic\src\sequential_convert.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\OpenclGenetic\src\sequential_convert_experiment.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\OpenclGenetic\src\opencl_stuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\OpenclGenetic\src\video_import.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

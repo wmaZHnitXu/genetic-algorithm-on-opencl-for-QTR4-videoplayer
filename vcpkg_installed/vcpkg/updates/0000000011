@@ -1,7 +1,6 @@
-Package: gdk-pixbuf
-Feature: jpeg
-Depends: libjpeg-turbo
+Package: ffmpeg
+Feature: avfilter
 Architecture: x64-windows
 Multi-Arch: same
-Description: Enable JPEG loader (requires libjpeg)
-Status: purge ok not-installed
+Description: Build the avfilter library
+Status: install ok half-installed

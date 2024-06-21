@@ -10,6 +10,11 @@
         "math.h": "c",
         "sequential_convert.h": "c",
         "dmatrix.h": "c",
-        "utils.h": "c"
+        "utils.h": "c",
+        "avformat.h": "c",
+        "avcodec.h": "c",
+        "avutil.h": "c",
+        "image_presentation.h": "c",
+        "video_import.h": "c"
     }
 }

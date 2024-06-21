@@ -1,10 +1,7 @@
-Package: gdk-pixbuf
-Version: 2.42.10
-Port-Version: 6
-Depends: gettext, gettext-libintl, glib, vcpkg-tool-meson
+Package: vcpkg-pkgconfig-get-modules
+Version: 2024-04-03
+Depends: pkgconf
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 8350d6f52e9d69cfcc5a4216078514335445ff1d6638d0f9156ab2e485836dd4
-Description: Image loading library.
-Default-Features: jpeg, png, tiff
-Status: purge ok half-installed
+Abi: c22362af6ed68dbabbd86b6546ed6fc171666323a9053ecc17fc970bf086cb92
+Status: install ok half-installed

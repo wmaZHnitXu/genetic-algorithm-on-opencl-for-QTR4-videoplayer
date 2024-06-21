@@ -3,4 +3,6 @@ D:\OpenclGenetic\src\main.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\D
 D:\OpenclGenetic\src\dmatrix.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\dmatrix.obj
 D:\OpenclGenetic\src\utils.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\utils.obj
 D:\OpenclGenetic\src\sequential_convert.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\sequential_convert.obj
+D:\OpenclGenetic\src\sequential_convert_experiment.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\sequential_convert_experiment.obj
 D:\OpenclGenetic\src\opencl_stuff.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\opencl_stuff.obj
+D:\OpenclGenetic\src\video_import.c;D:\OpenclGenetic\build\QTR4_gpu_videoconverter.dir\Debug\video_import.obj

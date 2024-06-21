@@ -1,7 +1,6 @@
-Package: tiff
-Feature: zip
-Depends: zlib
+Package: ffmpeg
+Feature: avdevice
 Architecture: x64-windows
 Multi-Arch: same
-Description: Support ZIP/deflate compression in TIFF image files
-Status: purge ok not-installed
+Description: Build the avdevice library
+Status: install ok installed

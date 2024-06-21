@@ -1,7 +1,6 @@
-Package: gdk-pixbuf
-Feature: png
-Depends: libpng
+Package: ffmpeg
+Feature: avdevice
 Architecture: x64-windows
 Multi-Arch: same
-Description: Enable PNG loader (requires libpng)
-Status: purge ok not-installed
+Description: Build the avdevice library
+Status: install ok half-installed

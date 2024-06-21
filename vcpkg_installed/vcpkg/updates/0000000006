@@ -1,7 +1,7 @@
-Package: gdk-pixbuf
-Feature: png
-Depends: libpng
+Package: vcpkg-cmake-get-vars
+Version: 2023-12-31
+Depends: vcpkg-cmake
 Architecture: x64-windows
 Multi-Arch: same
-Description: Enable PNG loader (requires libpng)
-Status: purge ok half-installed
+Abi: 714ce56e2aa193a73d9aeef10be49962d96a70a204bdfe3f34b3945202158f33
+Status: install ok half-installed

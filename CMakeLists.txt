@@ -15,6 +15,7 @@ add_executable(${PROJECT_NAME}
     src/dmatrix.c
     src/utils.c
     src/sequential_convert.c
+    src/sequential_convert_experiment.c
     src/opencl_stuff.c
     src/video_import
 )

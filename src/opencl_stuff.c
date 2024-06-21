@@ -190,23 +190,11 @@ Rect** invoke256xRectKernel(DMatrix* current, DMatrix* target) {
 
     size_t globalItemSize[] = {1, 256};
 
-    LARGE_INTEGER frequency;        // ticks per second
-    LARGE_INTEGER t1, t2;           // ticks
-    double elapsedTime;
-    // get ticks per second
-    QueryPerformanceFrequency(&frequency);
-    QueryPerformanceCounter(&t1);
-
     ret = clEnqueueNDRangeKernel(s_queue, s_kernel, 2, NULL, globalItemSize, NULL, 0, NULL, NULL);
     clFinish(s_queue);
 
-    QueryPerformanceCounter(&t2);
-    // compute and print the elapsed time in millisec
-    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("Kernel done in %f ms.\n", elapsedTime);
-
     ret = clEnqueueReadBuffer(s_queue, rectArray, CL_TRUE, 0, sizeof(int) * 8 * 256, result, 0, NULL, NULL);
-    printf("%i\n", result[2]);
+    //printf("%i\n", result[2]);
 
     clReleaseMemObject(rectArray);
     clReleaseMemObject(targetMatrixBuffer);

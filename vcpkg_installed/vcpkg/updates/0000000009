@@ -1,7 +1,6 @@
-Package: gdk-pixbuf
-Feature: tiff
-Depends: tiff
+Package: ffmpeg
+Feature: avcodec
 Architecture: x64-windows
 Multi-Arch: same
-Description: Enable TIFF loader (requires libtiff)
-Status: purge ok not-installed
+Description: Build the avcodec library
+Status: install ok half-installed

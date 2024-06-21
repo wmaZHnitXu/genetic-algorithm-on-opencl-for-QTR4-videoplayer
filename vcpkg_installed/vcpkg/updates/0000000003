@@ -1,9 +1,8 @@
-Package: atk
-Version: 2.38.0
-Port-Version: 8
-Depends: gettext, glib, vcpkg-tool-meson
+Package: pkgconf
+Version: 2.2.0
+Depends: vcpkg-tool-meson
 Architecture: x64-windows
 Multi-Arch: same
-Abi: dccc25d14ad689dd8d6320e61ac2466ac44784fa35af7c9b4cdcfb3992030ea1
-Description: GNOME Accessibility Toolkit
-Status: purge ok not-installed
+Abi: 55224aad38f97f2b240be4f2ed39b6449e9eac40346ab1d511d2c51c53db45f3
+Description: pkgconf is a program which helps to configure compiler and linker flags for development libraries. It is similar to pkg-config from freedesktop.org.
+Status: install ok installed

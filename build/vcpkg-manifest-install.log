@@ -1,7 +1,14 @@
 Detecting compiler hash for triplet x64-windows...
 Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/bin/Hostx64/x64/cl.exe
 All requested packages are currently installed.
-Total install time: 3.4 us
+Total install time: 2.7 us
+To use ffmpeg add the following to your CMake project:
+
+    find_package(FFMPEG REQUIRED)
+    target_include_directories(main PRIVATE ${FFMPEG_INCLUDE_DIRS})
+    target_link_directories(main PRIVATE ${FFMPEG_LIBRARY_DIRS})
+    target_link_libraries(main PRIVATE ${FFMPEG_LIBRARIES})
+
 The package libpng is compatible with built-in CMake targets:
 
     find_package(PNG REQUIRED)

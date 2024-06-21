@@ -1,7 +1,7 @@
-Package: gdk-pixbuf
-Feature: tiff
-Depends: tiff
+Package: vcpkg-pkgconfig-get-modules
+Version: 2024-04-03
+Depends: pkgconf
 Architecture: x64-windows
 Multi-Arch: same
-Description: Enable TIFF loader (requires libtiff)
-Status: purge ok half-installed
+Abi: c22362af6ed68dbabbd86b6546ed6fc171666323a9053ecc17fc970bf086cb92
+Status: install ok installed

@@ -1,7 +1,6 @@
-Package: tiff
-Feature: jpeg
-Depends: libjpeg-turbo
+Package: ffmpeg
+Feature: avformat
 Architecture: x64-windows
 Multi-Arch: same
-Description: Support JPEG compression in TIFF image files
-Status: purge ok not-installed
+Description: Build the avformat library
+Status: install ok installed
