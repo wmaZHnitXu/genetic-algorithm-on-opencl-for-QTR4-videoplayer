@@ -23,7 +23,6 @@ int main()
     else
         printf_s("clGetPlatformIDs(%i)\n", CL_err);
     
-    printf_s("sex???");
     DMatrix* targetMatrix = createMatrixFromPng("test.png");
     
     DMatrix* g = createMatrixFromPng("g.png");
@@ -39,21 +38,19 @@ int main()
 
     mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
 
-    printf_s("sex???\n");
     FFmpegState state;
     if (initFFmpegState(&state, "shrek.mp4") != 0) {
         fprintf(stderr, "Error initializing FFmpeg state.\n");
         return -1;
     }
-    printf_s("sex???\n");
     
-    ///* 256 Rects per kernel call
+    ///*256 Rects per kernel call
     
 
-    LARGE_INTEGER frequency;        // ticks per second
-    LARGE_INTEGER t1, t2;           // ticks
+    LARGE_INTEGER frequency;        //ticks per second
+    LARGE_INTEGER t1, t2;           //ticks
     double elapsedTime;
-    // get ticks per second
+    //get ticks per second
     QueryPerformanceFrequency(&frequency);
     QueryPerformanceCounter(&t1);
 
