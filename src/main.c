@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <CL/cl.h>
 #include <image_presentation.h>
@@ -9,8 +11,84 @@
 #include <opencl_stuff.h>
 #include <video_import.h>
 
-int main()
+static unsigned char clamp_to_uchar(int value) {
+    if (value < 0) {
+        return 0;
+    }
+    if (value > 255) {
+        return 255;
+    }
+    return (unsigned char)value;
+}
+
+void writeRectToFile(FILE* file, Rect* rect) {
+    if (file == NULL || rect == NULL) {
+        return;
+    }
+
+    unsigned char bytes[7];
+
+    int left = rect->x;
+    int top = rect->y;
+    int right = rect->x + rect->width;
+    int down = rect->y + rect->height;
+
+    unsigned char r = (rect->color >> 16) & 0xFF;
+    unsigned char g = (rect->color >> 8) & 0xFF;
+    unsigned char b = rect->color & 0xFF;
+
+    bytes[0] = clamp_to_uchar(left);
+    bytes[1] = clamp_to_uchar(top);
+    bytes[2] = clamp_to_uchar(right);
+    bytes[3] = clamp_to_uchar(down);
+    bytes[4] = r;
+    bytes[5] = g;
+    bytes[6] = b;
+
+    fwrite(bytes, sizeof(unsigned char), 7, file);
+}
+
+int main(int argc, char* argv[])
 {
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <input_video_file> [output_data_file]\n", argv[0]);
+        return -1;
+    }
+
+    const char* inputVideoFile = argv[1];
+    char* outputDataFile = NULL;
+
+    if (argc >= 3) {
+        outputDataFile = argv[2];
+    } else {
+
+        const size_t len = strlen(inputVideoFile);
+        outputDataFile = (char*)malloc(len + 5); //+5 for .dat & nullterm
+        if (outputDataFile == NULL) {
+            fprintf(stderr, "Failed to allocate memory for output file name.\n");
+            return -1;
+        }
+        strcpy(outputDataFile, inputVideoFile);
+
+        char* dot = strrchr(outputDataFile, '.');
+        if (dot != NULL) {
+            strcpy(dot, ".dat");
+        } else {
+            strcat(outputDataFile, ".dat");
+        }
+    }
+
+    printf("Input video: %s\n", inputVideoFile);
+    printf("Output data file: %s\n", outputDataFile);
+
+    FILE* outputFile = fopen(outputDataFile, "wb");
+    if (outputFile == NULL) {
+        fprintf(stderr, "Error opening output file '%s' for writing.\n", outputDataFile);
+        if (argc < 3) free(outputDataFile);
+        return -1;
+    }
+
+
     cl_int CL_err = CL_SUCCESS;
     cl_uint numPlatforms = 0;
 
@@ -39,14 +117,15 @@ int main()
     mse = mseBetweenDMatrixes(currentMatrix, targetMatrix);
 
     FFmpegState state;
-    if (initFFmpegState(&state, "shrek.mp4") != 0) {
+    if (initFFmpegState(&state, inputVideoFile) != 0) {
         fprintf(stderr, "Error initializing FFmpeg state.\n");
+        fclose(outputFile);
+        if (argc < 3) free(outputDataFile);
         return -1;
     }
     
     ///*256 Rects per kernel call
     
-
     LARGE_INTEGER frequency;        //ticks per second
     LARGE_INTEGER t1, t2;           //ticks
     double elapsedTime;
@@ -78,6 +157,8 @@ int main()
             Rect** rectsToApply = invoke256xRectKernel(currentMatrix, targetMatrixFrame);
             //printf_s("Rect#%i  MSE:%f color:0x%08x\n", i+1, 0.0, rectsToApply[255]->color);
             for (int j = 0; j < 256; j++) {
+                writeRectToFile(outputFile, rectsToApply[j]);
+
                 drawRectOnDMatrix(rectsToApply[j], currentMatrix);
                 free(rectsToApply[j]);
             }
@@ -88,13 +169,9 @@ int main()
 
             displayMatrix(currentMatrix);
             free(rectsToApply);
-
         }
-
         freeDMatrix(targetMatrixFrame);
-        
     }
-
     
     QueryPerformanceCounter(&t2);
     // compute and print the elapsed time in millisec
@@ -229,6 +306,11 @@ int main()
         displayMatrix(currentMatrix);
     }
 
+    fclose(outputFile);
+    if (argc < 3) {
+        free(outputDataFile);
+    }
+    
     freeDMatrix(currentMatrix); 
     clearAllTheOpenCLStuff();   
     return 0;

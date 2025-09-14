@@ -15,13 +15,13 @@ Node* createNode(Rect* rect) {
 }
 
 void insertAtBeginning(Node** head_ref, Rect* rect) {
-    Node* new_node = createNode(rect);  // Correct function call
+    Node* new_node = createNode(rect);
     new_node->next = *head_ref;
     *head_ref = new_node;
 }
 
 void insertAtEnd(Node** head_ref, Rect* rect) {
-    Node* new_node = createNode(rect);  // Correct function call
+    Node* new_node = createNode(rect);
     if (*head_ref == NULL) {
         *head_ref = new_node;
         return;
@@ -37,7 +37,6 @@ void deleteNode(Node** head_ref, Rect* key) {
     Node* temp = *head_ref;
     Node* prev = NULL;
 
-    // If head node itself holds the key to be deleted
     if (temp != NULL && temp->rect == key) {
         *head_ref = temp->next;
         free(temp->rect);
@@ -45,16 +44,13 @@ void deleteNode(Node** head_ref, Rect* key) {
         return;
     }
 
-    // Search for the key to be deleted, keep track of the previous node
     while (temp != NULL && temp->rect != key) {
         prev = temp;
         temp = temp->next;
     }
 
-    // If key was not present in the list
     if (temp == NULL) return;
 
-    // Unlink the node from the linked list
     prev->next = temp->next;
     free(temp->rect);
     free(temp);
@@ -86,7 +82,6 @@ void deleteLastNode(Node** head_ref) {
     free(temp);
 }
 
-// Function to print the linked list
 void printList(Node* node) {
     int elem = 0;
     while (node != NULL) {
@@ -96,16 +91,15 @@ void printList(Node* node) {
     printf("NULL\n");
 }
 
-// Function to free the entire linked list
 void freeList(Node* head) {
     Node* current = head;
     Node* next;
 
     while (current != NULL) {
-        next = current->next; // Save the next node
+        next = current->next;
         free(current->rect);
-        free(current);        // Free the current node
-        current = next;       // Move to the next node
+        free(current);
+        current = next;
     }
 }
 
